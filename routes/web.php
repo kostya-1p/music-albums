@@ -19,6 +19,9 @@ name('albums');
 Route::get('/album/create', [\App\Http\Controllers\AlbumController::class, 'getCreatePage'])->
 name('createAlbumPage')->middleware('auth');
 
+Route::get('/album/edit/{id}', [\App\Http\Controllers\AlbumController::class, 'getEditPage'])->
+name('editAlbumPage')->middleware('auth')->whereNumber('id');
+
 Route::post('/album/create', [\App\Http\Controllers\AlbumController::class, 'addAlbum'])->
 name('addAlbum')->middleware('auth');
 

@@ -17,6 +17,11 @@ class AlbumController extends Controller
         return view('create-album');
     }
 
+    public function getEditPage(int $albumId) {
+        $album = Album::find($albumId);
+        return view('create-album')->with('album', $album);
+    }
+
     public function addAlbum(Request $request) {
         $request->validate([
             'name' => ['required', 'string'],
@@ -24,11 +29,9 @@ class AlbumController extends Controller
             'img' => ['required', 'string']
         ]);
 
-        if (filter_var($request->img, FILTER_VALIDATE_URL))
-        {
+        if (filter_var($request->img, FILTER_VALIDATE_URL)) {
             $headers = get_headers($request->img, 1);
-            if (strpos($headers['Content-Type'], 'image/') !== false)
-            {
+            if (strpos($headers['Content-Type'], 'image/') !== false) {
                 Album::addAlbum($request->name, $request->artist, $request->description, $request->img);
                 return redirect(RouteServiceProvider::HOME);
             }
