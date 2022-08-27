@@ -12,9 +12,12 @@
     </x-slot>
 
 
-    <form method="POST">
+    <form method="POST" action="{{($isEditPage) ? route('editAlbum') : route('addAlbum')}}">
         @csrf
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-6 bg-white border-b border-gray-200 m-10">
+            @if($isEditPage)
+                <input type="hidden" name="id" value={{$album->id}}>
+            @endif
 
             <x-label for="name" value="Name"/>
             <x-input id="name" class="block mt-1 mb-10 w-full" type="text" name="name"

@@ -13,10 +13,17 @@
             <p class="headingMd">Description:</p>
             <p>{{$album->description}}</p>
         </div>
+
+        @auth
+            <button class="album_button">
+                <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">EDIT</a>
+            </button>
+        @endauth
     @endforeach
 
+    <br>
     @auth
-        <x-button class="ml-60">
+        <x-button class="ml-60 mt-10">
             <a href="{{route('createAlbumPage')}}">Add Album</a>
         </x-button>
     @endauth

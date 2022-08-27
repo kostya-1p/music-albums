@@ -17,8 +17,7 @@ class Album extends Model
         'img'
     ];
 
-    public static function addAlbum(string $name, string $artist, string $description, string $img) {
-        $album = new Album();
+    public static function storeAlbum(Album $album, string $name, string $artist, string $description, string $img) {
         $album->name = $name;
         $album->artist = $artist;
         $album->description = $description;

@@ -23,20 +23,42 @@ class AlbumController extends Controller
     }
 
     public function addAlbum(Request $request) {
+        $album = new Album();
+        return $this->storeAlbum($request, $album);
+    }
+
+    public function editAlbum(Request $request) {
+        $album = Album::find($request->id);
+        return $this->storeAlbum($request, $album);
+    }
+
+    private function storeAlbum(Request $request, Album $album) {
+        $this->validateAlbumData($request);
+
+        if ($this->isValidImageURL($request->img)) {
+            Album::storeAlbum($album, $request->name, $request->artist, $request->description, $request->img);
+            return redirect(RouteServiceProvider::HOME);
+        }
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    private function isValidImageURL(string $img) {
+        if (filter_var($img, FILTER_VALIDATE_URL)) {
+            $headers = get_headers($img, 1);
+            if (strpos($headers['Content-Type'], 'image/') !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function validateAlbumData(Request $request) {
         $request->validate([
             'name' => ['required', 'string'],
             'artist' => ['required', 'string'],
             'img' => ['required', 'string']
         ]);
-
-        if (filter_var($request->img, FILTER_VALIDATE_URL)) {
-            $headers = get_headers($request->img, 1);
-            if (strpos($headers['Content-Type'], 'image/') !== false) {
-                Album::addAlbum($request->name, $request->artist, $request->description, $request->img);
-                return redirect(RouteServiceProvider::HOME);
-            }
-        }
-
-        return redirect(RouteServiceProvider::HOME);
     }
 }

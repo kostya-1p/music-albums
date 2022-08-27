@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .album-container {
-    margin: 40px 250px 40px 250px;
+    margin: 40px 250px 0px 250px;
     padding: 40px;
     background-color: white;
     min-height: 200px;
@@ -42,4 +42,13 @@ body {
 .headingMd {
     font-size: 1.2rem;
     line-height: 1.5;
+}
+
+.album_button {
+    background-color: white;
+    padding: 5px 25px;
+    border: thin solid cornflowerblue;
+    border-radius: 10px;
+    margin-left: 250px;
+    margin-top: 5px;
 }
