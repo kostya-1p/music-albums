@@ -11,4 +11,8 @@ class AlbumController extends Controller
         $albums = Album::all();
         return view('albums')->with('albums', $albums);
     }
+
+    public function getCreatePage() {
+        return view('create-album');
+    }
 }

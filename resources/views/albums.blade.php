@@ -14,4 +14,10 @@
             <p>{{$album->description}}</p>
         </div>
     @endforeach
+
+    @auth
+        <x-button class="ml-60">
+            <a href="{{route('createAlbumPage')}}">Add Album</a>
+        </x-button>
+    @endauth
 </x-app-layout>

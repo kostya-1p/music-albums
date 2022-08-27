@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\AlbumController::class, 'showAllAlbums'])->
 name('albums');
 
+Route::get('/album/create', [\App\Http\Controllers\AlbumController::class, 'getCreatePage'])->
+name('createAlbumPage')->middleware('auth');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
