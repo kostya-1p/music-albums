@@ -10,8 +10,8 @@
             <img src="{{$album->img}}" width="150px" height="150px" class="album-image"/>
             <p class="headingMd">Name: {{$album->name}}</p>
             <p class="headingMd">Artist: {{$album->artist}}</p>
-            <p class="headingMd">Description:</p>
-            <p>{{$album->description}}</p>
+            <p class="headingMd mb-2">Description:</p>
+            <p class="description">{!! nl2br(e($album->description)) !!}</p>
         </div>
 
         @auth
@@ -29,7 +29,7 @@
 
     <br>
     @auth
-        <x-button class="ml-60 mt-10">
+        <x-button class="ml-60 mt-10 mb-10">
             <a href="{{route('createAlbumPage')}}">Add Album</a>
         </x-button>
     @endauth
