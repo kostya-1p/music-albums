@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class AlbumController extends Controller
 {
     public function showAllAlbums() {
-        $albums = Album::all();
+        $albums = Album::paginate(5);
         return view('albums')->with('albums', $albums);
     }
 
