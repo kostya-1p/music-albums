@@ -34,6 +34,16 @@ class AlbumController extends Controller
         return $this->storeAlbum($request, $album);
     }
 
+    public function deleteAlbum(Request $request) {
+        $request->validate([
+            'id' => ['required', 'integer'],
+        ]);
+
+        $this->logDeletedAlbum(Album::find($request->id));
+        Album::destroy($request->id);
+        return redirect()->back();
+    }
+
     private function storeAlbum(Request $request, Album $album) {
         $this->validateAlbumData($request);
         $oldAlbumData = clone $album;
@@ -96,5 +106,14 @@ class AlbumController extends Controller
             'new_album_name' => $newAlbumData->name,
             'new_album_artist' => $newAlbumData->artist,
             'new_album_img' => $newAlbumData->img,]);
+    }
+
+    private function logDeletedAlbum(Album $album) {
+        Log::info('Album deleted', [
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'album_id' => $album->id,
+            'album_name' => $album->name,
+            'album_artist' => $album->artist]);
     }
 }

@@ -28,6 +28,9 @@ name('addAlbum')->middleware('auth');
 Route::post('/album/edit', [\App\Http\Controllers\AlbumController::class, 'editAlbum'])->
 name('editAlbum')->middleware('auth');
 
+Route::post('/album/delete', [\App\Http\Controllers\AlbumController::class, 'deleteAlbum'])->
+name('deleteAlbum')->middleware('auth');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

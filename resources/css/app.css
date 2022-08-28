@@ -55,4 +55,5 @@ body {
     border: thin solid cornflowerblue;
     border-radius: 10px;
     margin-top: 5px;
+    display: inline;
 }

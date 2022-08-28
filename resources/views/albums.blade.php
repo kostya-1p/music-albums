@@ -19,9 +19,11 @@
                 <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">EDIT</a>
             </button>
 
-            <button class="album_button">
-                <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">DELETE</a>
-            </button>
+            <form method="post" class="inline" action="{{route('deleteAlbum')}}">
+                @csrf
+                <input type="hidden" name="id" value={{$album->id}}>
+                <button class="album_button">DELETE</button>
+            </form>
         @endauth
     @endforeach
 
