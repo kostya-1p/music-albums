@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AlbumController extends Controller
 {
@@ -34,9 +36,12 @@ class AlbumController extends Controller
 
     private function storeAlbum(Request $request, Album $album) {
         $this->validateAlbumData($request);
+        $oldAlbumData = clone $album;
+        $isEditing = isset($album->id);
 
         if ($this->isValidImageURL($request->img)) {
             Album::storeAlbum($album, $request->name, $request->artist, $request->description, $request->img);
+            $this->logAlbumChanges($isEditing, $oldAlbumData, $album);
             return redirect(RouteServiceProvider::HOME);
         }
 
@@ -60,5 +65,36 @@ class AlbumController extends Controller
             'artist' => ['required', 'string'],
             'img' => ['required', 'string']
         ]);
+    }
+
+    private function logAlbumChanges(bool $isEditing, Album $oldAlbumData, Album $album) {
+        if ($isEditing) {
+            $this->logEditedAlbum($oldAlbumData, $album);
+            return;
+        }
+
+        $this->logAddedAlbum($album);
+    }
+
+    private function logAddedAlbum(Album $album) {
+        Log::info('Album added', [
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'album_id' => $album->id,
+            'album_name' => $album->name,
+            'album_artist' => $album->artist]);
+    }
+
+    private function logEditedAlbum(Album $oldAlbumData, Album $newAlbumData) {
+        Log::info('Album edited', [
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'album_id' => $oldAlbumData->id,
+            'old_album_name' => $oldAlbumData->name,
+            'old_album_artist' => $oldAlbumData->artist,
+            'old_album_img' => $oldAlbumData->img,
+            'new_album_name' => $newAlbumData->name,
+            'new_album_artist' => $newAlbumData->artist,
+            'new_album_img' => $newAlbumData->img,]);
     }
 }
