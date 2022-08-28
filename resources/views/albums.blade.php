@@ -15,8 +15,12 @@
         </div>
 
         @auth
-            <button class="album_button">
+            <button class="album_button edit_btn_indent">
                 <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">EDIT</a>
+            </button>
+
+            <button class="album_button">
+                <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">DELETE</a>
             </button>
         @endauth
     @endforeach

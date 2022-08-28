@@ -44,11 +44,15 @@ body {
     line-height: 1.5;
 }
 
+.edit_btn_indent{
+    margin-left: 250px;
+    margin-right: 15px;
+}
+
 .album_button {
     background-color: white;
     padding: 5px 25px;
     border: thin solid cornflowerblue;
     border-radius: 10px;
-    margin-left: 250px;
     margin-top: 5px;
 }
