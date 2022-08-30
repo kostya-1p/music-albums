@@ -131,7 +131,9 @@ class AlbumController extends Controller
     }
 
     private function getArrayOfArtists(array $responseArray) {
-        return $this->getArrayFromResponse($responseArray, 'artist');
+        $artistsArray = $this->getArrayFromResponse($responseArray, 'artist');
+        $uniqueArtists = array_unique($artistsArray);
+        return array_values($uniqueArtists);
     }
 
     private function getArrayOfImages(array $responseArray) {
@@ -155,5 +157,18 @@ class AlbumController extends Controller
         }
 
         return $array;
+    }
+
+    public function getAlbumDescription(string $albumName, string $artistName) {
+        $apiKey = env('API_KEY');
+        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={$apiKey}&artist={$artistName}&album={$albumName}&format=json");
+        $responseArray = $response->json();
+        $description = '';
+
+        if (array_key_exists('album', $responseArray) && array_key_exists('wiki', $responseArray['album'])) {
+            $description = $responseArray['album']['wiki']['summary'];
+        }
+
+        return json_encode(['description' => $description]);
     }
 }

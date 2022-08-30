@@ -35,6 +35,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/search/{albumName}', [\App\Http\Controllers\AlbumController::class, 'searchAlbumByName'])->name('search');
+Route::get('/search/{albumName}', [\App\Http\Controllers\AlbumController::class, 'searchAlbumByName'])->
+name('search');
+Route::get('/search_description/{albumName}/{artistName}', [\App\Http\Controllers\AlbumController::class, 'getAlbumDescription'])->
+name('albumInfo');
 
 require __DIR__ . '/auth.php';
