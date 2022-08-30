@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class AlbumController extends Controller
@@ -115,5 +116,44 @@ class AlbumController extends Controller
             'album_id' => $album->id,
             'album_name' => $album->name,
             'album_artist' => $album->artist]);
+    }
+
+    public function searchAlbumByName(string $albumName) {
+        $apiKey = env('API_KEY');
+        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album={$albumName}&api_key={$apiKey}&format=json");
+        $responseArray = $response->json();
+
+        $artistsAndImages = [];
+        $artistsAndImages['artists'] = $this->getArrayOfArtists($responseArray);
+        $artistsAndImages['images'] = $this->getArrayOfImages($responseArray);
+
+        return json_encode($artistsAndImages);
+    }
+
+    private function getArrayOfArtists(array $responseArray) {
+        return $this->getArrayFromResponse($responseArray, 'artist');
+    }
+
+    private function getArrayOfImages(array $responseArray) {
+        $imagesFullArray = $this->getArrayFromResponse($responseArray, 'image');
+        $largeImages = [];
+        $indexLargeImages = 2;
+
+        foreach ($imagesFullArray as $image) {
+            $largeImages[] = $image[$indexLargeImages]['#text'];
+        }
+
+        return $largeImages;
+    }
+
+    private function getArrayFromResponse(array $responseArray, string $key) {
+        $array = [];
+        $albums = $responseArray['results']['albummatches']['album'];
+
+        foreach ($albums as $album) {
+            $array[] = $album[$key];
+        }
+
+        return $array;
     }
 }
