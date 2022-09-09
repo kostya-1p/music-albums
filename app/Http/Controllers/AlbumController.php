@@ -88,7 +88,7 @@ class AlbumController extends Controller
     }
 
     private function logAddedAlbum(Album $album) {
-        Log::info('Album added', [
+        Log::channel('singleAlbums')->info('Album added', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
             'album_id' => $album->id,
@@ -97,7 +97,7 @@ class AlbumController extends Controller
     }
 
     private function logEditedAlbum(Album $oldAlbumData, Album $newAlbumData) {
-        Log::info('Album edited', [
+        Log::channel('singleAlbums')->info('Album edited', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
             'album_id' => $oldAlbumData->id,
@@ -110,7 +110,7 @@ class AlbumController extends Controller
     }
 
     private function logDeletedAlbum(Album $album) {
-        Log::info('Album deleted', [
+        Log::channel('singleAlbums')->info('Album deleted', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
             'album_id' => $album->id,
