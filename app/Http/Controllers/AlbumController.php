@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumRequest;
+use App\Http\Requests\DeleteAlbumRequest;
 use App\Models\Album;
 use App\Providers\RouteServiceProvider;
+use App\Repositories\Interfaces\AlbumRepositoryInterface;
+use App\Services\AlbumService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -11,41 +17,78 @@ use Illuminate\Support\Facades\Log;
 
 class AlbumController extends Controller
 {
-    public function showAllAlbums() {
-        $albums = Album::paginate(5);
-        return view('albums')->with('albums', $albums);
+    private AlbumRepositoryInterface $albumRepository;
+    private AlbumService $albumService;
+
+    public function __construct(AlbumRepositoryInterface $albumRepository, AlbumService $albumService)
+    {
+        $this->albumRepository = $albumRepository;
+        $this->albumService = $albumService;
     }
 
-    public function getCreatePage() {
+    public function showAllAlbums(): View
+    {
+        $albums = $this->albumRepository->getAllPaginated(5);
+        return view('albums', compact('albums'));
+    }
+
+    public function getCreatePage(): View
+    {
         return view('create-album');
     }
 
-    public function getEditPage(int $albumId) {
-        $album = Album::find($albumId);
-        return view('create-album')->with('album', $album);
-    }
-
-    public function addAlbum(Request $request) {
-        $album = new Album();
-        return $this->storeAlbum($request, $album);
-    }
-
-    public function editAlbum(Request $request) {
-        $album = Album::find($request->id);
-        return $this->storeAlbum($request, $album);
-    }
-
-    public function deleteAlbum(Request $request) {
-        $request->validate([
-            'id' => ['required', 'integer'],
-        ]);
-
-        $this->logDeletedAlbum(Album::find($request->id));
-        Album::destroy($request->id);
+    public function getEditPage(int $albumId): RedirectResponse|View
+    {
+        $album = $this->albumRepository->getById($albumId);
+        if (isset($album)) {
+            return view('create-album', compact('album'));
+        }
         return redirect()->back();
     }
 
-    private function storeAlbum(Request $request, Album $album) {
+    public function addAlbum(AlbumRequest $request): RedirectResponse
+    {
+        if ($this->albumService->isValidImageURL($request->img)) {
+            $this->albumService->make($request->validated());
+            //TODO log create
+            return redirect(RouteServiceProvider::HOME);
+        }
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function editAlbum(AlbumRequest $request): RedirectResponse
+    {
+        $album = $this->albumRepository->getById($request->id);
+        if (!isset($album)) {
+            if ($this->albumService->isValidImageURL($request->img)) {
+                $this->albumService->make($request->validated());
+                //TODO log create
+                return redirect(RouteServiceProvider::HOME);
+            }
+        }
+
+        $this->albumService->edit($album, $request->validated());
+        //TODO log edit
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function deleteAlbum(DeleteAlbumRequest $request): RedirectResponse
+    {
+        $album = $this->albumRepository->getById($request->id);
+        if (!isset($album)) {
+            return redirect(RouteServiceProvider::HOME);
+        }
+
+        $this->albumService->delete($album);
+        //TODO log delete
+
+        return redirect()->back();
+    }
+
+    private function storeAlbum(Request $request, Album $album)
+    {
         $this->validateAlbumData($request);
         $oldAlbumData = clone $album;
         $isEditing = isset($album->id);
@@ -59,7 +102,8 @@ class AlbumController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
-    private function isValidImageURL(string $img) {
+    private function isValidImageURL(string $img)
+    {
         if (filter_var($img, FILTER_VALIDATE_URL)) {
             $headers = get_headers($img, 1);
             if (strpos($headers['Content-Type'], 'image/') !== false) {
@@ -70,7 +114,8 @@ class AlbumController extends Controller
         return false;
     }
 
-    private function validateAlbumData(Request $request) {
+    private function validateAlbumData(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'string'],
             'artist' => ['required', 'string'],
@@ -78,7 +123,8 @@ class AlbumController extends Controller
         ]);
     }
 
-    private function logAlbumChanges(bool $isEditing, Album $oldAlbumData, Album $album) {
+    private function logAlbumChanges(bool $isEditing, Album $oldAlbumData, Album $album)
+    {
         if ($isEditing) {
             $this->logEditedAlbum($oldAlbumData, $album);
             return;
@@ -87,7 +133,8 @@ class AlbumController extends Controller
         $this->logAddedAlbum($album);
     }
 
-    private function logAddedAlbum(Album $album) {
+    private function logAddedAlbum(Album $album)
+    {
         Log::channel('singleAlbums')->info('Album added', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
@@ -96,7 +143,8 @@ class AlbumController extends Controller
             'album_artist' => $album->artist]);
     }
 
-    private function logEditedAlbum(Album $oldAlbumData, Album $newAlbumData) {
+    private function logEditedAlbum(Album $oldAlbumData, Album $newAlbumData)
+    {
         Log::channel('singleAlbums')->info('Album edited', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
@@ -109,7 +157,8 @@ class AlbumController extends Controller
             'new_album_img' => $newAlbumData->img,]);
     }
 
-    private function logDeletedAlbum(Album $album) {
+    private function logDeletedAlbum(Album $album)
+    {
         Log::channel('singleAlbums')->info('Album deleted', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
@@ -118,7 +167,8 @@ class AlbumController extends Controller
             'album_artist' => $album->artist]);
     }
 
-    public function searchAlbumByName(string $albumName) {
+    public function searchAlbumByName(string $albumName)
+    {
         $apiKey = env('API_KEY');
         $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album={$albumName}&api_key={$apiKey}&format=json");
         $responseArray = $response->json();
@@ -130,13 +180,15 @@ class AlbumController extends Controller
         return json_encode($artistsAndImages);
     }
 
-    private function getArrayOfArtists(array $responseArray) {
+    private function getArrayOfArtists(array $responseArray)
+    {
         $artistsArray = $this->getArrayFromResponse($responseArray, 'artist');
         $uniqueArtists = array_unique($artistsArray);
         return array_values($uniqueArtists);
     }
 
-    private function getArrayOfImages(array $responseArray) {
+    private function getArrayOfImages(array $responseArray)
+    {
         $imagesFullArray = $this->getArrayFromResponse($responseArray, 'image');
         $largeImages = [];
         $indexLargeImages = 2;
@@ -148,7 +200,8 @@ class AlbumController extends Controller
         return $largeImages;
     }
 
-    private function getArrayFromResponse(array $responseArray, string $key) {
+    private function getArrayFromResponse(array $responseArray, string $key)
+    {
         $array = [];
         $albums = $responseArray['results']['albummatches']['album'];
 
@@ -159,7 +212,8 @@ class AlbumController extends Controller
         return $array;
     }
 
-    public function getAlbumDescription(string $albumName, string $artistName) {
+    public function getAlbumDescription(string $albumName, string $artistName)
+    {
         $apiKey = env('API_KEY');
         $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={$apiKey}&artist={$artistName}&album={$albumName}&format=json");
         $responseArray = $response->json();
