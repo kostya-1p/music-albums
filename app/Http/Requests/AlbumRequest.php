@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ImageURL;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,7 @@ class AlbumRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'artist' => ['required', 'string'],
-            'img' => ['required', 'string'],
+            'img' => ['required', 'string', new ImageURL],
             'description' => ['string']
         ];
     }

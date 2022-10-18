@@ -63,10 +63,10 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
-        'singleAlbums' => [
+        'albums_changes' => [
             'driver' => 'single',
             'path' => storage_path('logs/albums.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'daily' => [

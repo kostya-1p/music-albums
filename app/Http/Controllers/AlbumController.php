@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\DeleteAlbumRequest;
+use App\Logging\AlbumLogger;
 use App\Models\Album;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
@@ -19,11 +20,14 @@ class AlbumController extends Controller
 {
     private AlbumRepositoryInterface $albumRepository;
     private AlbumService $albumService;
+    private AlbumLogger $albumLogger;
 
-    public function __construct(AlbumRepositoryInterface $albumRepository, AlbumService $albumService)
+    public function __construct(AlbumRepositoryInterface $albumRepository, AlbumService $albumService,
+                                AlbumLogger              $albumLogger)
     {
         $this->albumRepository = $albumRepository;
         $this->albumService = $albumService;
+        $this->albumLogger = $albumLogger;
     }
 
     public function showAllAlbums(): View
@@ -48,12 +52,8 @@ class AlbumController extends Controller
 
     public function addAlbum(AlbumRequest $request): RedirectResponse
     {
-        if ($this->albumService->isValidImageURL($request->img)) {
-            $this->albumService->make($request->validated());
-            //TODO log create
-            return redirect(RouteServiceProvider::HOME);
-        }
-
+        $this->albumService->make($request->validated());
+        $this->albumLogger->logAddedAlbum($request->validated());
         return redirect(RouteServiceProvider::HOME);
     }
 
@@ -61,15 +61,14 @@ class AlbumController extends Controller
     {
         $album = $this->albumRepository->getById($request->id);
         if (!isset($album)) {
-            if ($this->albumService->isValidImageURL($request->img)) {
-                $this->albumService->make($request->validated());
-                //TODO log create
-                return redirect(RouteServiceProvider::HOME);
-            }
+            $this->albumService->make($request->validated());
+            $this->albumLogger->logAddedAlbum($request->validated());
+            return redirect(RouteServiceProvider::HOME);
         }
 
+        $oldAlbum = clone $album;
         $this->albumService->edit($album, $request->validated());
-        //TODO log edit
+        $this->albumLogger->logEditedAlbum($oldAlbum, $request->validated());
 
         return redirect(RouteServiceProvider::HOME);
     }
@@ -81,8 +80,8 @@ class AlbumController extends Controller
             return redirect(RouteServiceProvider::HOME);
         }
 
+        $this->albumLogger->logDeletedAlbum($album);
         $this->albumService->delete($album);
-        //TODO log delete
 
         return redirect()->back();
     }
@@ -167,6 +166,7 @@ class AlbumController extends Controller
             'album_artist' => $album->artist]);
     }
 
+    //TODO write API for functions below
     public function searchAlbumByName(string $albumName)
     {
         $apiKey = env('API_KEY');
