@@ -21,16 +21,25 @@
             @endif
 
             <x-label for="name" value="Name"/>
+            @error('name')
+            <div style="color: red">{{ $message }}</div>
+            @enderror
             <x-input id="name" class="block mt-1 mb-10 w-full" type="text" name="name"
                      value="{{($isEditPage) ? $album->name : ''}}" required/>
 
             <x-label for="artist" value="Artist"/>
+            @error('artist')
+            <div style="color: red">{{ $message }}</div>
+            @enderror
             <x-input list="artistList" id="artist" name="artist" class="block mt-1 mb-10 w-full" type="text"
                      value="{{($isEditPage) ? $album->artist : ''}}" required/>
 
             <datalist id="artistList"></datalist>
 
             <x-label for="image" value="Image Link"/>
+            @error('img')
+            <div style="color: red">{{ $message }}</div>
+            @enderror
             <x-input list="imageList" id="image" name="img" class="block mt-1 mb-10 w-full" type="text"
                      value="{{($isEditPage) ? $album->img : ''}}" required/>
 
@@ -39,6 +48,9 @@
             <img id="albumImagePreview" src="" alt="">
 
             <x-label for="description" value="Description"/>
+            @error('description')
+            <div style="color: red">{{ $message }}</div>
+            @enderror
             <textarea id="description" rows="6" name="description"
                       class="block mt-1 mb-10 w-full">{{($isEditPage) ? $album->description : ''}}</textarea>
 
