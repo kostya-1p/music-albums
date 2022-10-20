@@ -26,10 +26,10 @@ class AlbumRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string'],
-            'artist' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:150'],
+            'artist' => ['required', 'string', 'max:150'],
             'img' => ['required', 'string', new ImageURL],
-            'description' => ['string']
+            'description' => ['string', 'max:1000']
         ];
     }
 }

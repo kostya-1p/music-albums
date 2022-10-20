@@ -87,7 +87,7 @@ class AlbumController extends Controller
     }
 
     //TODO write API for functions below
-    public function searchAlbumByName(string $albumName)
+    public function searchAlbumByName(string $albumName): string
     {
         $apiKey = env('API_KEY');
         $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album={$albumName}&api_key={$apiKey}&format=json");
@@ -132,7 +132,7 @@ class AlbumController extends Controller
         return $array;
     }
 
-    public function getAlbumDescription(string $albumName, string $artistName)
+    public function getAlbumDescription(string $albumName, string $artistName): string
     {
         $apiKey = env('API_KEY');
         $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={$apiKey}&artist={$artistName}&album={$albumName}&format=json");

@@ -16,11 +16,6 @@ Route::controller(AlbumController::class)->group(function () {
     Route::get('/', function () {
         return redirect(route('albums.index'));
     });
-
-    //TODO handle them when making API
-    Route::get('/search/{albumName}', 'searchAlbumByName')->name('search');
-    Route::get('/search_description/{albumName}/{artistName}', 'getAlbumDescription')->
-    name('albumInfo');
 });
 
 require __DIR__ . '/auth.php';
