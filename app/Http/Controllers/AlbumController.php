@@ -30,18 +30,18 @@ class AlbumController extends Controller
         $this->albumLogger = $albumLogger;
     }
 
-    public function showAllAlbums(): View
+    public function index(): View
     {
         $albums = $this->albumRepository->getAllPaginated(5);
         return view('albums', compact('albums'));
     }
 
-    public function getCreatePage(): View
+    public function create(): View
     {
         return view('create-album');
     }
 
-    public function getEditPage(int $albumId): RedirectResponse|View
+    public function edit(int $albumId): RedirectResponse|View
     {
         $album = $this->albumRepository->getById($albumId);
         if (isset($album)) {
@@ -50,14 +50,14 @@ class AlbumController extends Controller
         return redirect()->back();
     }
 
-    public function addAlbum(AlbumRequest $request): RedirectResponse
+    public function store(AlbumRequest $request): RedirectResponse
     {
         $this->albumService->make($request->validated());
         $this->albumLogger->logAddedAlbum($request->validated());
         return redirect(RouteServiceProvider::HOME);
     }
 
-    public function editAlbum(AlbumRequest $request): RedirectResponse
+    public function update(AlbumRequest $request): RedirectResponse
     {
         $album = $this->albumRepository->getById($request->id);
         if (!isset($album)) {
@@ -73,7 +73,7 @@ class AlbumController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
-    public function deleteAlbum(DeleteAlbumRequest $request): RedirectResponse
+    public function destroy(DeleteAlbumRequest $request): RedirectResponse
     {
         $album = $this->albumRepository->getById($request->id);
         if (!isset($album)) {

@@ -12,7 +12,8 @@
     </x-slot>
 
 
-    <form method="POST" action="{{($isEditPage) ? route('editAlbum') : route('addAlbum')}}" autocomplete="off">
+    <form method="POST" action="{{($isEditPage) ? route('albums.update', ['id'=>$album->id]) : route('albums.store')}}"
+          autocomplete="off">
         @csrf
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-6 bg-white border-b border-gray-200 m-10">
             @if($isEditPage)

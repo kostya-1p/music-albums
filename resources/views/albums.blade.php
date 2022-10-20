@@ -16,10 +16,10 @@
 
         @auth
             <button class="album_button edit_btn_indent">
-                <a href="{{route('editAlbumPage', ['id'=>$album->id])}}">EDIT</a>
+                <a href="{{route('albums.edit', ['id'=>$album->id])}}">EDIT</a>
             </button>
 
-            <form method="post" class="inline" action="{{route('deleteAlbum')}}">
+            <form method="post" class="inline" action="{{route('albums.destroy', ['id'=>$album->id])}}">
                 @csrf
                 <input type="hidden" name="id" value={{$album->id}}>
                 <button class="album_button">DELETE</button>
@@ -30,7 +30,7 @@
     <br>
     @auth
         <x-button class="ml-60 mt-10 mb-10">
-            <a href="{{route('createAlbumPage')}}">Add Album</a>
+            <a href="{{route('albums.create')}}">Add Album</a>
         </x-button>
     @endauth
 
