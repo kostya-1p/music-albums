@@ -29,7 +29,7 @@ class AlbumRequest extends FormRequest
             'name' => ['required', 'string', 'max:150'],
             'artist' => ['required', 'string', 'max:150'],
             'img' => ['required', 'string', new ImageURL],
-            'description' => ['string', 'max:1000']
+            'description' => ['max:1000']
         ];
     }
 }

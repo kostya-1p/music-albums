@@ -85,8 +85,6 @@ class AlbumController extends Controller
 
         return redirect()->back();
     }
-
-    //TODO write API for functions below
     public function searchAlbumByName(string $albumName): string
     {
         $apiKey = env('API_KEY');

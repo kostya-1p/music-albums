@@ -18,4 +18,10 @@ Route::controller(AlbumController::class)->group(function () {
     });
 });
 
+Route::controller(AlbumController::class)->group(function () {
+    Route::get('/search/{albumName}', 'searchAlbumByName')->name('search');
+    Route::get('/search_description/{albumName}/{artistName}', 'getAlbumDescription')->
+    name('albumInfo');
+});
+
 require __DIR__ . '/auth.php';
