@@ -5,16 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\DeleteAlbumRequest;
 use App\Logging\AlbumLogger;
-use App\Models\Album;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
 use App\Services\AlbumService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class AlbumController extends Controller
 {
@@ -85,6 +81,7 @@ class AlbumController extends Controller
 
         return redirect()->back();
     }
+
     public function searchAlbumByName(string $albumName): string
     {
         $apiKey = env('API_KEY');
