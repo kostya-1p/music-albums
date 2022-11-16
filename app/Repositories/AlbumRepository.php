@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Album;
+use App\Models\Artist;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class AlbumRepository implements AlbumRepositoryInterface
 {
@@ -14,6 +16,9 @@ class AlbumRepository implements AlbumRepositoryInterface
 
     public function getAllPaginated(int $pageSize)
     {
-        return Album::paginate(5);
+        return DB::table('albums')
+            ->join('artists', 'artists.id', '=', 'albums.artist_id')
+            ->select('albums.*', 'artists.name as artist')
+            ->paginate($pageSize);
     }
 }
