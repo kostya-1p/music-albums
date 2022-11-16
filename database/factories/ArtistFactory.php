@@ -6,9 +6,9 @@ use App\Models\Artist;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Album>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Artist>
  */
-class AlbumFactory extends Factory
+class ArtistFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,7 @@ class AlbumFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word(),
-            'artist_id' => $this->faker->numberBetween(1, Artist::count()),
-            'description' => $this->faker->realText(),
+            'name' => $this->faker->name(),
             'img' => $this->faker->imageUrl(),
         ];
     }
