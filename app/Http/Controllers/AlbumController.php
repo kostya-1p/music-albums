@@ -11,6 +11,7 @@ use App\Services\AlbumService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
@@ -29,6 +30,12 @@ class AlbumController extends Controller
     public function index(): View
     {
         $albums = $this->albumRepository->getAllPaginated(5);
+        return view('albums', compact('albums'));
+    }
+
+    public function indexFiltered(Request $request): View
+    {
+        $albums = $this->albumRepository->getFilteredByArtist($request->artist, 5);
         return view('albums', compact('albums'));
     }
 

@@ -5,6 +5,11 @@
         </h2>
     </x-slot>
 
+    <form method="GET" action="{{ route('albums.indexFiltered') }}">
+        <input id="artist" name="artist" type="text"/>
+        <button type="submit" id="submit_filter" class="btn btn-primary">Filter</button>
+    </form>
+
     @foreach($albums as $album)
         <div class="album-container">
             <img src="{{$album->img}}" width="150px" height="150px" class="album-image"/>
