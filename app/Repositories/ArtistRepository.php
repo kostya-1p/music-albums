@@ -12,4 +12,9 @@ class ArtistRepository implements ArtistRepositoryInterface
     {
         return Artist::paginate($pageSize);
     }
+
+    public function getFiltered(string $artistName, int $pageSize): LengthAwarePaginator
+    {
+        return Artist::where('name', 'like', "%{$artistName}%")->paginate($pageSize);
+    }
 }

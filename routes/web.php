@@ -22,6 +22,7 @@ Route::controller(AlbumController::class)->group(function () {
 
 Route::controller(ArtistController::class)->group(function () {
     Route::get('/artists', 'index')->name('artists.index');
+    Route::get('/artists/filter', 'indexFiltered')->name('artists.indexFiltered');
 });
 
 Route::controller(AlbumController::class)->group(function () {

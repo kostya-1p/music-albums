@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\DeleteAlbumRequest;
+use App\Http\Requests\FilterRequest;
 use App\Logging\AlbumLogger;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
@@ -33,7 +34,7 @@ class AlbumController extends Controller
         return view('albums', compact('albums'));
     }
 
-    public function indexFiltered(Request $request): View
+    public function indexFiltered(FilterRequest $request): View
     {
         $albums = $this->albumRepository->getFilteredByArtist($request->artist, 5);
         return view('albums', compact('albums'));
