@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repositories\AlbumRepository;
+use App\Repositories\ArtistRepository;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
+use App\Repositories\Interfaces\ArtistRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -18,6 +20,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AlbumRepositoryInterface::class,
             AlbumRepository::class
+        );
+
+        $this->app->bind(
+            ArtistRepositoryInterface::class,
+            ArtistRepository::class
         );
     }
 

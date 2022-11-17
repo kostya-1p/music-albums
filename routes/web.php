@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArtistController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AlbumController;
 
@@ -17,6 +18,10 @@ Route::controller(AlbumController::class)->group(function () {
     Route::get('/', function () {
         return redirect(route('albums.index'));
     });
+});
+
+Route::controller(ArtistController::class)->group(function () {
+    Route::get('/artists', 'index')->name('artists.index');
 });
 
 Route::controller(AlbumController::class)->group(function () {

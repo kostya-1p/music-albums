@@ -16,6 +16,12 @@
                         All Albums
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('artists.index')" :active="request()->routeIs('artists.index')">
+                        All Artists
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
