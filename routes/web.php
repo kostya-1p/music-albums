@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AlbumController;
 
 Route::group(['controller' => AlbumController::class, 'middleware' => 'auth', 'prefix' => 'albums'], function () {
-    Route::get('/albums/create', 'create')->name('albums.create');
-    Route::get('/albums/edit/{id}', 'edit')->name('albums.edit')->whereNumber('id');
-    Route::post('/albums/create', 'store')->name('albums.store');
-    Route::put('/albums/edit/{id}', 'update')->name('albums.update')->whereNumber('id');
-    Route::delete('/albums/delete/{id}', 'destroy')->name('albums.destroy')->whereNumber('id');
+    Route::get('/create', 'create')->name('albums.create');
+    Route::get('/edit/{id}', 'edit')->name('albums.edit')->whereNumber('id');
+    Route::post('/create', 'store')->name('albums.store');
+    Route::put('/edit/{id}', 'update')->name('albums.update')->whereNumber('id');
+    Route::delete('/delete/{id}', 'destroy')->name('albums.destroy')->whereNumber('id');
 });
 
 Route::controller(AlbumController::class)->group(function () {
@@ -18,6 +18,12 @@ Route::controller(AlbumController::class)->group(function () {
     Route::get('/', function () {
         return redirect(route('albums.index'));
     });
+});
+
+Route::group(['controller' => ArtistController::class, 'middleware' => 'auth', 'prefix' => 'artists'], function () {
+    Route::get('/create', 'create')->name('artists.create');
+    Route::post('/create', 'store')->name('artists.store');
+    Route::put('/edit/{id}', 'update')->name('artists.update')->whereNumber('id');
 });
 
 Route::controller(ArtistController::class)->group(function () {

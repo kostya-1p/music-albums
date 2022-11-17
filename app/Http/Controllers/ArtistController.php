@@ -27,4 +27,9 @@ class ArtistController extends Controller
         $artists = $this->artistRepository->getFiltered($request->artist, 5);
         return view('artists', compact('artists'));
     }
+
+    public function create(): View
+    {
+        return view('create-artist');
+    }
 }

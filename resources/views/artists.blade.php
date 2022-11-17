@@ -19,6 +19,12 @@
 
     <br>
 
+    @auth
+        <x-button class="ml-60 mt-10 mb-10">
+            <a href="{{route('artists.create')}}">Add Artist</a>
+        </x-button>
+    @endauth
+
     <div class="d-flex justify-content-center mb-10 ml-60 mr-60 mt-5">
         {{ $artists->links() }}
     </div>
