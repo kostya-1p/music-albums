@@ -11,16 +11,18 @@ class ImageURL implements InvokableRule
      *
      * @param string $attribute
      * @param mixed $value
-     * @param \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     * @param \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString $fail
      * @return void
      */
     public function __invoke($attribute, $value, $fail)
     {
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             $headers = get_headers($value, 1);
-            if (strpos($headers['Content-Type'], 'image/') === false) {
+            if (!str_contains($headers['Content-Type'], 'image/')) {
                 $fail('The :attribute must be an image URL');
             }
+        } else {
+            $fail('The :attribute must be an image URL');
         }
     }
 }

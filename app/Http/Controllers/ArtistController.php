@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\FilterRequest;
+use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\ArtistRepositoryInterface;
+use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class ArtistController extends Controller
 {
     private ArtistRepositoryInterface $artistRepository;
+    private ArtistService $artistService;
 
-    public function __construct(ArtistRepositoryInterface $artistRepository)
+    public function __construct(ArtistRepositoryInterface $artistRepository, ArtistService $artistService)
     {
         $this->artistRepository = $artistRepository;
+        $this->artistService = $artistService;
     }
 
     public function index(): View
@@ -31,5 +36,11 @@ class ArtistController extends Controller
     public function create(): View
     {
         return view('create-artist');
+    }
+
+    public function store(ArtistRequest $request): RedirectResponse
+    {
+        $this->artistService->make($request->validated());
+        return redirect()->route('artists.index');
     }
 }
