@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\FilterRequest;
+use App\Logging\ArtistLogger;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\ArtistRepositoryInterface;
 use App\Services\ArtistService;
@@ -14,11 +15,14 @@ class ArtistController extends Controller
 {
     private ArtistRepositoryInterface $artistRepository;
     private ArtistService $artistService;
+    private ArtistLogger $artistLogger;
 
-    public function __construct(ArtistRepositoryInterface $artistRepository, ArtistService $artistService)
+    public function __construct(ArtistRepositoryInterface $artistRepository, ArtistService $artistService,
+                                ArtistLogger              $artistLogger)
     {
         $this->artistRepository = $artistRepository;
         $this->artistService = $artistService;
+        $this->artistLogger = $artistLogger;
     }
 
     public function index(): View
@@ -41,6 +45,7 @@ class ArtistController extends Controller
     public function store(ArtistRequest $request): RedirectResponse
     {
         $this->artistService->make($request->validated());
+        $this->artistLogger->logAddedArtist($request->validated());
         return redirect()->route('artists.index');
     }
 }

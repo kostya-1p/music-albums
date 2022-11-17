@@ -69,6 +69,12 @@ return [
             'level' => env('LOG_LEVEL', 'info'),
         ],
 
+        'artists_changes' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/artists.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
