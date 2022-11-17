@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\FilterRequest;
 use App\Logging\ArtistLogger;
@@ -46,6 +47,31 @@ class ArtistController extends Controller
     {
         $this->artistService->make($request->validated());
         $this->artistLogger->logAddedArtist($request->validated());
+        return redirect()->route('artists.index');
+    }
+
+    public function edit(int $artistId): RedirectResponse|View
+    {
+        $artist = $this->artistRepository->getById($artistId);
+        if (isset($artist)) {
+            return view('create-artist', compact('artist'));
+        }
+        return redirect()->back();
+    }
+
+    public function update(ArtistRequest $request): RedirectResponse
+    {
+        $artist = $this->artistRepository->getById($request->id);
+        if (!isset($artist)) {
+            $this->artistService->make($request->validated());
+            $this->artistLogger->logAddedArtist($request->validated());
+            return redirect()->route('artists.index');
+        }
+
+        $oldArtist = clone $artist;
+        $this->artistService->edit($artist, $request->validated());
+        $this->artistLogger->logEditedArtist($oldArtist, $request->validated());
+
         return redirect()->route('artists.index');
     }
 }

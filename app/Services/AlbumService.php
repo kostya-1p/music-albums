@@ -31,16 +31,4 @@ class AlbumService
 
         return $album->save();
     }
-
-    public function isValidImageURL(string $img): bool
-    {
-        if (filter_var($img, FILTER_VALIDATE_URL)) {
-            $headers = get_headers($img, 1);
-            if (strpos($headers['Content-Type'], 'image/') !== false) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

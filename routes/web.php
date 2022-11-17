@@ -22,6 +22,7 @@ Route::controller(AlbumController::class)->group(function () {
 
 Route::group(['controller' => ArtistController::class, 'middleware' => 'auth', 'prefix' => 'artists'], function () {
     Route::get('/create', 'create')->name('artists.create');
+    Route::get('/edit/{id}', 'edit')->name('artists.edit')->whereNumber('id');
     Route::post('/create', 'store')->name('artists.store');
     Route::put('/edit/{id}', 'update')->name('artists.update')->whereNumber('id');
 });

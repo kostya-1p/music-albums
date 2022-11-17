@@ -17,4 +17,9 @@ class ArtistRepository implements ArtistRepositoryInterface
     {
         return Artist::where('name', 'like', "%{$artistName}%")->paginate($pageSize);
     }
+
+    public function getById(int $artistId): ?Artist
+    {
+        return Artist::find($artistId);
+    }
 }

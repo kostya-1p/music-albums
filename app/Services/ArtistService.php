@@ -12,6 +12,11 @@ class ArtistService
         return $this->storeAlbum($artist, $artistData);
     }
 
+    public function edit(Artist $artist, array $artistData): bool
+    {
+        return $this->storeAlbum($artist, $artistData);
+    }
+
     private function storeAlbum(Artist $artist, array $artistData): bool
     {
         $artist->name = $artistData['name'];
