@@ -17,6 +17,11 @@ class ArtistService
         return $this->storeAlbum($artist, $artistData);
     }
 
+    public function delete(Artist $artist): bool
+    {
+        return $artist->delete();
+    }
+
     private function storeAlbum(Artist $artist, array $artistData): bool
     {
         $artist->name = $artistData['name'];

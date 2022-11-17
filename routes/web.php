@@ -25,6 +25,7 @@ Route::group(['controller' => ArtistController::class, 'middleware' => 'auth', '
     Route::get('/edit/{id}', 'edit')->name('artists.edit')->whereNumber('id');
     Route::post('/create', 'store')->name('artists.store');
     Route::put('/edit/{id}', 'update')->name('artists.update')->whereNumber('id');
+    Route::delete('/delete/{id}', 'destroy')->name('artists.destroy')->whereNumber('id');
 });
 
 Route::controller(ArtistController::class)->group(function () {

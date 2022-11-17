@@ -28,4 +28,13 @@ class ArtistLogger
             'new_artist_name' => $newArtistData['name'],
             'new_artist_img' => $newArtistData['img']]);
     }
+
+    public function logDeletedArtist(Artist $artist): void
+    {
+        Log::channel('artists_changes')->info('Artist deleted', [
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->name,
+            'artist_id' => $artist->id,
+            'artist_name' => $artist->name]);
+    }
 }

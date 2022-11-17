@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\ArtistRequest;
+use App\Http\Requests\DeleteAlbumRequest;
 use App\Http\Requests\FilterRequest;
 use App\Logging\ArtistLogger;
-use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\ArtistRepositoryInterface;
 use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
@@ -73,5 +72,18 @@ class ArtistController extends Controller
         $this->artistLogger->logEditedArtist($oldArtist, $request->validated());
 
         return redirect()->route('artists.index');
+    }
+
+    public function destroy(DeleteAlbumRequest $request): RedirectResponse
+    {
+        $artist = $this->artistRepository->getById($request->id);
+        if (!isset($artist)) {
+            return redirect()->route('artists.index');
+        }
+
+        $this->artistLogger->logDeletedArtist($artist);
+        $this->artistService->delete($artist);
+
+        return redirect()->back();
     }
 }

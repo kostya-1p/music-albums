@@ -20,6 +20,13 @@
             <button class="album_button edit_btn_indent">
                 <a href="{{route('artists.edit', ['id'=>$artist->id])}}">EDIT</a>
             </button>
+
+            <form method="post" class="inline" action="{{route('artists.destroy', ['id'=>$artist->id])}}">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="id" value={{$artist->id}}>
+                <button class="album_button">DELETE</button>
+            </form>
         @endauth
     @endforeach
 
