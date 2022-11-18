@@ -38,7 +38,8 @@ class AlbumController extends Controller
     public function index(): View
     {
         $albums = $this->albumRepository->getAllPaginated(5);
-        return view('albums', compact('albums'));
+        $artists = $this->artistRepository->getByAlbums($albums);
+        return view('albums', compact('albums', 'artists'));
     }
 
     public function indexFiltered(FilterRequest $request): View

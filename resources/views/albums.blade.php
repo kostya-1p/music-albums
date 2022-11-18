@@ -10,11 +10,11 @@
         <button type="submit" id="submit_filter" class="btn btn-primary">Filter</button>
     </form>
 
-    @foreach($albums as $album)
+    @foreach($albums as $index => $album)
         <div class="album-container">
             <img src="{{$album->img}}" width="150px" height="150px" class="album-image"/>
             <p class="headingMd">Name: {{$album->name}}</p>
-            <p class="headingMd">Artist: {{$album->artist}}</p>
+            <p class="headingMd">Artist: {{$artists[$index]->name}}</p>
             <p class="headingMd mb-2">Description:</p>
             <p class="description">{!! nl2br(e($album->description)) !!}</p>
         </div>

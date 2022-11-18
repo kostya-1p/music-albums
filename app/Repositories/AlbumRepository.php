@@ -17,10 +17,10 @@ class AlbumRepository implements AlbumRepositoryInterface
 
     public function getAllPaginated(int $pageSize): LengthAwarePaginator
     {
-        return $this->getAlbumArtistsJoinQuery()
-            ->paginate($pageSize);
+        return Album::paginate($pageSize);
     }
 
+    //Should be other functionality
     public function getFilteredByArtist(string $artistName, int $pageSize): LengthAwarePaginator
     {
         return $this->getAlbumArtistsJoinQuery()

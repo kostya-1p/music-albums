@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\Artist;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 interface ArtistRepositoryInterface
 {
@@ -14,4 +15,6 @@ interface ArtistRepositoryInterface
     public function getById(int $artistId): ?Artist;
 
     public function getByName(string $artistName): ?Artist;
+
+    public function getByAlbums(LengthAwarePaginator $albums): Collection;
 }

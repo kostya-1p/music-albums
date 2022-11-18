@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Artist;
 use App\Repositories\Interfaces\ArtistRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class ArtistRepository implements ArtistRepositoryInterface
 {
@@ -26,5 +27,14 @@ class ArtistRepository implements ArtistRepositoryInterface
     public function getByName(string $artistName): ?Artist
     {
         return Artist::where('name', $artistName)->first();
+    }
+
+    public function getByAlbums(LengthAwarePaginator $albums): Collection
+    {
+        $artists = collect();
+        foreach ($albums as $album) {
+            $artists->push($album->artist);
+        }
+        return $artists;
     }
 }
