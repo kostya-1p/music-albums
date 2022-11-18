@@ -19,8 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(AlbumController::class)->group(function () {
-    Route::get('/search/{albumName}', 'searchAlbumByName')->name('search');
-    Route::get('/search_description/{albumName}/{artistName}', 'getAlbumDescription')->
-    name('albumInfo');
+Route::controller(\App\Http\Controllers\AlbumLastFmController::class)->group(function () {
+    Route::get('/album_lastfm/{albumName}', 'index')->name('album_lastfm.index');
+    Route::get('/album_lastfm/description/{albumName}/{artistName}', 'indexDescription')->
+    name('album_lastfm.index_description');
 });

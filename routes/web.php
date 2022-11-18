@@ -33,10 +33,4 @@ Route::controller(ArtistController::class)->group(function () {
     Route::get('/artists/filter', 'indexFiltered')->name('artists.indexFiltered');
 });
 
-Route::controller(AlbumController::class)->group(function () {
-    Route::get('/search/{albumName}', 'searchAlbumByName')->name('search');
-    Route::get('/search_description/{albumName}/{artistName}', 'getAlbumDescription')->
-    name('albumInfo');
-});
-
 require __DIR__ . '/auth.php';
