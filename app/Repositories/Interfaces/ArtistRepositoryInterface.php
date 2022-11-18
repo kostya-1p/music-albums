@@ -12,4 +12,6 @@ interface ArtistRepositoryInterface
     public function getFiltered(string $artistName, int $pageSize): LengthAwarePaginator;
 
     public function getById(int $artistId): ?Artist;
+
+    public function getByName(string $artistName): ?Artist;
 }

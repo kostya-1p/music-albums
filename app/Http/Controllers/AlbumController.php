@@ -8,7 +8,9 @@ use App\Http\Requests\FilterRequest;
 use App\Logging\AlbumLogger;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
+use App\Repositories\Interfaces\ArtistRepositoryInterface;
 use App\Services\AlbumService;
+use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Http;
@@ -19,13 +21,18 @@ class AlbumController extends Controller
     private AlbumRepositoryInterface $albumRepository;
     private AlbumService $albumService;
     private AlbumLogger $albumLogger;
+    private ArtistRepositoryInterface $artistRepository;
+    private ArtistService $artistService;
 
     public function __construct(AlbumRepositoryInterface $albumRepository, AlbumService $albumService,
-                                AlbumLogger              $albumLogger)
+                                AlbumLogger              $albumLogger, ArtistRepositoryInterface $artistRepository,
+                                ArtistService            $artistService)
     {
         $this->albumRepository = $albumRepository;
         $this->albumService = $albumService;
         $this->albumLogger = $albumLogger;
+        $this->artistRepository = $artistRepository;
+        $this->artistService = $artistService;
     }
 
     public function index(): View
@@ -56,7 +63,12 @@ class AlbumController extends Controller
 
     public function store(AlbumRequest $request): RedirectResponse
     {
-        $this->albumService->make($request->validated());
+        $artist = $this->artistRepository->getByName($request->artist);
+
+        if (!isset($artist)) {
+            $artist = $this->artistService->make(['name' => $request->artist, 'img' => null]);
+        }
+        $this->albumService->make($request->validated(), $artist->id);
         $this->albumLogger->logAddedAlbum($request->validated());
         return redirect(RouteServiceProvider::HOME);
     }

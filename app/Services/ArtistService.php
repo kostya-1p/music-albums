@@ -6,10 +6,11 @@ use App\Models\Artist;
 
 class ArtistService
 {
-    public function make(array $artistData): bool
+    public function make(array $artistData): Artist
     {
         $artist = new Artist();
-        return $this->storeAlbum($artist, $artistData);
+        $this->storeAlbum($artist, $artistData);
+        return $artist;
     }
 
     public function edit(Artist $artist, array $artistData): bool

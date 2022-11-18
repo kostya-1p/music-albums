@@ -22,4 +22,9 @@ class ArtistRepository implements ArtistRepositoryInterface
     {
         return Artist::find($artistId);
     }
+
+    public function getByName(string $artistName): ?Artist
+    {
+        return Artist::where('name', $artistName)->first();
+    }
 }
