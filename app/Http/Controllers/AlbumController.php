@@ -55,8 +55,9 @@ class AlbumController extends Controller
     public function edit(int $albumId): RedirectResponse|View
     {
         $album = $this->albumRepository->getById($albumId);
+        $artist = $album->artist;
         if (isset($album)) {
-            return view('create-album', compact('album'));
+            return view('create-album', compact('album', 'artist'));
         }
         return redirect()->back();
     }
@@ -76,14 +77,19 @@ class AlbumController extends Controller
     public function update(AlbumRequest $request): RedirectResponse
     {
         $album = $this->albumRepository->getById($request->id);
+        $artist = $this->artistRepository->getByName($request->artist);
+        if (!isset($artist)) {
+            $artist = $this->artistService->make(['name' => $request->artist, 'img' => null]);
+        }
+
         if (!isset($album)) {
-            $this->albumService->make($request->validated());
+            $this->albumService->make($request->validated(), $artist->id);
             $this->albumLogger->logAddedAlbum($request->validated());
             return redirect(RouteServiceProvider::HOME);
         }
 
         $oldAlbum = clone $album;
-        $this->albumService->edit($album, $request->validated());
+        $this->albumService->edit($album, $request->validated(), $artist->id);
         $this->albumLogger->logEditedAlbum($oldAlbum, $request->validated());
 
         return redirect(RouteServiceProvider::HOME);

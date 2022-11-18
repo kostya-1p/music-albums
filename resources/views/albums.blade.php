@@ -26,6 +26,7 @@
 
             <form method="post" class="inline" action="{{route('albums.destroy', ['id'=>$album->id])}}">
                 @csrf
+                @method('DELETE')
                 <input type="hidden" name="id" value={{$album->id}}>
                 <button class="album_button">DELETE</button>
             </form>

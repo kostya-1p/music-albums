@@ -12,9 +12,9 @@ class AlbumService
         return $this->storeAlbum($album, $albumData, $artistId);
     }
 
-    public function edit(Album $album, array $albumData): bool
+    public function edit(Album $album, array $albumData, int $artistId): bool
     {
-        return $this->storeAlbum($album, $albumData);
+        return $this->storeAlbum($album, $albumData, $artistId);
     }
 
     public function delete(Album $album): bool

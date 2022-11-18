@@ -24,7 +24,7 @@ class AlbumLogger
             'user_name' => Auth::user()->name,
             'album_id' => $oldAlbumData->id,
             'old_album_name' => $oldAlbumData->name,
-            'old_album_artist' => $oldAlbumData->artist,
+            'old_album_artist' => $oldAlbumData->artist->name,
             'old_album_img' => $oldAlbumData->img,
             'new_album_name' => $newAlbumData['name'],
             'new_album_artist' => $newAlbumData['artist'],
@@ -38,6 +38,6 @@ class AlbumLogger
             'user_name' => Auth::user()->name,
             'album_id' => $album->id,
             'album_name' => $album->name,
-            'album_artist' => $album->artist]);
+            'album_artist_id' => $album->artist_id]);
     }
 }

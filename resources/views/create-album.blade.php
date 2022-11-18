@@ -17,6 +17,7 @@
         @csrf
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-6 bg-white border-b border-gray-200 m-10">
             @if($isEditPage)
+                @method('PUT')
                 <input type="hidden" name="id" id="albumId" value={{$album->id}}>
             @endif
 
@@ -32,7 +33,7 @@
             <div style="color: red">{{ $message }}</div>
             @enderror
             <x-input list="artistList" id="artist" name="artist" class="block mt-1 mb-10 w-full" type="text"
-                     value="{{($isEditPage) ? $album->artist : ''}}" required/>
+                     value="{{($isEditPage) ? $artist->name : ''}}" required/>
 
             <datalist id="artistList"></datalist>
 
