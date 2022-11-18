@@ -43,13 +43,12 @@ function setDescription() {
     const artistName = $artistInput.val();
 
     $.ajax({
-        url: `http://localhost:8000/search_description/${albumName}/${artistName}`,
+        url: `http://localhost:8000/api/album_lastfm/description/${albumName}/${artistName}`,
         type: "GET",
         success: function (descriptionJSON) {
-            const descriptionArray = JSON.parse(descriptionJSON);
             const $descriptionTag = $('#description');
             $descriptionTag.empty();
-            $descriptionTag.append(descriptionArray['description']);
+            $descriptionTag.append(descriptionJSON.description);
         }
     });
 }
@@ -58,12 +57,11 @@ function doneTyping() {
     const albumName = $input.val();
 
     $.ajax({
-        url: "http://localhost:8000/search/" + albumName,
+        url: `http://localhost:8000/api/album_lastfm/${albumName}`,
         type: "GET",
         success: function (artistsImagesJson) {
-            const artistImagesArray = JSON.parse(artistsImagesJson);
-            setDataToDataList('#artistList', artistImagesArray['artists']);
-            setDataToDataList('#imageList', artistImagesArray['images']);
+            setDataToDataList('#artistList', artistsImagesJson.artists);
+            setDataToDataList('#imageList', artistsImagesJson.images);
         }
     });
 }

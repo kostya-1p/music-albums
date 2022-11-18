@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AlbumLastFmService;
+use Illuminate\Http\JsonResponse;
 
 class AlbumLastFmController extends Controller
 {
@@ -15,15 +16,18 @@ class AlbumLastFmController extends Controller
         $this->apiKey = env('API_KEY');
     }
 
-    public function index(string $albumName)
+    public function index(string $albumName): JsonResponse
     {
         $artistsAndImages = $this->albumLastFmService->loadArtistsAndImages($this->apiKey, $albumName);
-        return json_encode($artistsAndImages);
+        return response()->json($artistsAndImages);
     }
 
-    public function indexDescription(string $albumName, string $artistName)
+    public function indexDescription(string $albumName, string $artistName): JsonResponse
     {
         $description = $this->albumLastFmService->loadDescription($this->apiKey, $albumName, $artistName);
-        return json_encode(['description' => $description]);
+        if (empty($description)) {
+            response()->json(['description' => $description], 204);
+        }
+        return response()->json(['description' => $description]);
     }
 }
