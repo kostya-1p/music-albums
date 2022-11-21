@@ -15,11 +15,13 @@ class AlbumService
 
     public function edit(Album $album, array $albumData, int $artistId): bool
     {
+        Storage::disk('images')->delete("albums/$album->img");
         return $this->storeAlbum($album, $albumData, $artistId);
     }
 
     public function delete(Album $album): bool
     {
+        Storage::disk('images')->delete("albums/$album->img");
         return $album->delete();
     }
 

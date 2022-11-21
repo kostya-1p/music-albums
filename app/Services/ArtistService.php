@@ -16,11 +16,13 @@ class ArtistService
 
     public function edit(Artist $artist, array $artistData): bool
     {
+        Storage::disk('images')->delete("artists/$artist->img");
         return $this->storeAlbum($artist, $artistData);
     }
 
     public function delete(Artist $artist): bool
     {
+        Storage::disk('images')->delete("artists/$artist->img");
         return $artist->delete();
     }
 
