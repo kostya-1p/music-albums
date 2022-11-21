@@ -13,8 +13,6 @@ use App\Services\AlbumService;
 use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
@@ -106,64 +104,5 @@ class AlbumController extends Controller
         $this->albumService->delete($album);
 
         return redirect()->back();
-    }
-
-    public function searchAlbumByName(string $albumName): string
-    {
-        $apiKey = env('API_KEY');
-        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album={$albumName}&api_key={$apiKey}&format=json");
-        $responseArray = $response->json();
-
-        $artistsAndImages = [];
-        $artistsAndImages['artists'] = $this->getArrayOfArtists($responseArray);
-        $artistsAndImages['images'] = $this->getArrayOfImages($responseArray);
-
-        return json_encode($artistsAndImages);
-    }
-
-    private function getArrayOfArtists(array $responseArray)
-    {
-        $artistsArray = $this->getArrayFromResponse($responseArray, 'artist');
-        $uniqueArtists = array_unique($artistsArray);
-        return array_values($uniqueArtists);
-    }
-
-    private function getArrayOfImages(array $responseArray)
-    {
-        $imagesFullArray = $this->getArrayFromResponse($responseArray, 'image');
-        $largeImages = [];
-        $indexLargeImages = 2;
-
-        foreach ($imagesFullArray as $image) {
-            $largeImages[] = $image[$indexLargeImages]['#text'];
-        }
-
-        return $largeImages;
-    }
-
-    private function getArrayFromResponse(array $responseArray, string $key)
-    {
-        $array = [];
-        $albums = $responseArray['results']['albummatches']['album'];
-
-        foreach ($albums as $album) {
-            $array[] = $album[$key];
-        }
-
-        return $array;
-    }
-
-    public function getAlbumDescription(string $albumName, string $artistName): string
-    {
-        $apiKey = env('API_KEY');
-        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={$apiKey}&artist={$artistName}&album={$albumName}&format=json");
-        $responseArray = $response->json();
-        $description = '';
-
-        if (array_key_exists('album', $responseArray) && array_key_exists('wiki', $responseArray['album'])) {
-            $description = $responseArray['album']['wiki']['summary'];
-        }
-
-        return json_encode(['description' => $description]);
     }
 }
