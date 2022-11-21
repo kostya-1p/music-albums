@@ -18,11 +18,14 @@ class AlbumFactory extends Factory
      */
     public function definition()
     {
+        $storageImagePaths = Storage::disk('images')->files('albums');
+        $randFileNameIndex = rand(0, count($storageImagePaths) - 1);
+
         return [
             'name' => $this->faker->word(),
             'artist_id' => $this->faker->numberBetween(1, Artist::count()),
             'description' => $this->faker->realText(),
-            'img' => $this->faker->image(storage_path('/app/images/albums'), 174, 174, null, false),
+            'img' => basename($storageImagePaths[$randFileNameIndex]),
         ];
     }
 }

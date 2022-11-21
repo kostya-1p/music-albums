@@ -13,6 +13,7 @@ use App\Services\AlbumService;
 use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
 {
