@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Album;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumService
 {
@@ -27,7 +28,11 @@ class AlbumService
         $album->name = $albumData['name'];
         $album->artist_id = $artistId;
         $album->description = $albumData['description'];
-        $album->img = $albumData['img'];
+
+        $imageFile = file_get_contents($albumData['img']);
+        $imageName = substr($albumData['img'], strrpos($albumData['img'], '/') + 1);
+        Storage::disk('images')->put("albums/$imageName", $imageFile);
+        $album->img = $imageName;
 
         return $album->save();
     }
