@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Artist;
+use Illuminate\Support\Facades\Storage;
 
 class ArtistService
 {
@@ -26,7 +27,11 @@ class ArtistService
     private function storeAlbum(Artist $artist, array $artistData): bool
     {
         $artist->name = $artistData['name'];
-        $artist->img = $artistData['img'];
+
+        $imageFile = file_get_contents($artistData['img']);
+        $imageName = substr($artistData['img'], strrpos($artistData['img'], '/') + 1);
+        Storage::disk('images')->put("artists/$imageName", $imageFile);
+        $artist->img = $imageName;
 
         return $artist->save();
     }
