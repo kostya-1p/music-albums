@@ -3,10 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Album;
+use App\Models\Artist;
 use App\Repositories\Interfaces\AlbumRepositoryInterface;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class AlbumRepository implements AlbumRepositoryInterface
 {
@@ -20,18 +19,10 @@ class AlbumRepository implements AlbumRepositoryInterface
         return Album::paginate($pageSize);
     }
 
-    //Should be other functionality
     public function getFilteredByArtist(string $artistName, int $pageSize): LengthAwarePaginator
     {
-        return $this->getAlbumArtistsJoinQuery()
-            ->where('artists.name', 'LIKE', "%{$artistName}%")
-            ->paginate($pageSize);
-    }
-
-    private function getAlbumArtistsJoinQuery(): Builder
-    {
-        return DB::table('albums')
-            ->join('artists', 'artists.id', '=', 'albums.artist_id')
-            ->select('albums.*', 'artists.name as artist');
+        $artists = Artist::where('name', $artistName)->paginate();
+        $artistsIds = $artists->pluck('id');
+        return Album::whereIn('artist_id', $artistsIds)->paginate();
     }
 }

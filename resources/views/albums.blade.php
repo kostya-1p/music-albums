@@ -6,7 +6,11 @@
     </x-slot>
 
     <form method="GET" action="{{ route('albums.indexFiltered') }}">
-        <input id="artist" name="artist" type="text"/>
+        <select name="artist">
+            @foreach(\App\Models\Artist::all() as $artist)
+                <option>{{$artist->name}}</option>
+            @endforeach
+        </select>
         <button type="submit" id="submit_filter" class="btn btn-primary">Filter</button>
     </form>
 
