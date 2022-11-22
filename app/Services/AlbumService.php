@@ -30,12 +30,17 @@ class AlbumService
         $album->name = $albumData['name'];
         $album->artist_id = $artistId;
         $album->description = $albumData['description'];
-
-        $imageFile = file_get_contents($albumData['img']);
-        $imageName = substr($albumData['img'], strrpos($albumData['img'], '/') + 1);
-        Storage::disk('images')->put("albums/$imageName", $imageFile);
-        $album->img = $imageName;
+        $album->img = $this->downloadImageToStorage($albumData['img']);
 
         return $album->save();
+    }
+
+    private function downloadImageToStorage(string $url): string
+    {
+        $imageFile = file_get_contents($url);
+        $imageInfo = pathinfo($url);
+        $imageName = $imageInfo['basename'];
+        Storage::disk('images')->put("albums/$imageName", $imageFile);
+        return $imageName;
     }
 }
