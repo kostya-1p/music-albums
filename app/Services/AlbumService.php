@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Album;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class AlbumService
@@ -30,7 +31,7 @@ class AlbumService
         $album->name = $albumData['name'];
         $album->artist_id = $artistId;
         $album->description = $albumData['description'];
-        $album->img = $this->downloadImageToStorage($albumData['img']);
+        $album->img = $this->storeImage($albumData['img']);
 
         return $album->save();
     }
@@ -42,5 +43,12 @@ class AlbumService
         $imageName = $imageInfo['basename'];
         Storage::disk('images')->put("albums/$imageName", $imageFile);
         return $imageName;
+    }
+
+    private function storeImage(UploadedFile $file): string
+    {
+        $fileName = time() . '.' . $file->extension();
+        $file->move(storage_path('app/images/albums'), $fileName);
+        return $fileName;
     }
 }

@@ -13,7 +13,7 @@
 
 
     <form method="POST" action="{{($isEditPage) ? route('albums.update', ['id'=>$album->id]) : route('albums.store')}}"
-          autocomplete="off">
+          autocomplete="off" enctype="multipart/form-data">
         @csrf
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-6 bg-white border-b border-gray-200 m-10">
             @if($isEditPage)
@@ -37,11 +37,12 @@
 
             <datalist id="artistList"></datalist>
 
-            <x-label for="image" value="Image Link"/>
+            <x-label for="image" value="Image"/>
             @error('img')
             <div style="color: red">{{ $message }}</div>
             @enderror
-            <x-input list="imageList" id="image" name="img" class="block mt-1 mb-10 w-full" type="text" required/>
+            <x-input type="file" id="image" name="img" class="block mt-1 mb-10 w-full"  accept="image/*"
+                     required/>
 
             <datalist id="imageList"></datalist>
 
