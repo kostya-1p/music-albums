@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Artist;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class ArtistService
@@ -29,7 +30,7 @@ class ArtistService
     private function storeArtist(Artist $artist, array $artistData): bool
     {
         $artist->name = $artistData['name'];
-        $artist->img = $this->downloadImageToStorage($artistData['img']);
+        $artist->img = $this->storeImage($artistData['img']);
 
         return $artist->save();
     }
@@ -42,6 +43,16 @@ class ArtistService
             $imageName = $imageInfo['basename'];
             Storage::disk('images')->put("artists/$imageName", $imageFile);
             return $imageName;
+        }
+        return null;
+    }
+
+    private function storeImage(?UploadedFile $file): ?string
+    {
+        if (isset($file)) {
+            $fileName = time() . '.' . $file->extension();
+            $file->move(storage_path('app/images/artists'), $fileName);
+            return $fileName;
         }
         return null;
     }

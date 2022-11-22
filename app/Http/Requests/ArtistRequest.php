@@ -27,7 +27,7 @@ class ArtistRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:150'],
-            'img' => ['required', 'string', new ImageURL],
+            'img' => ['image'],
         ];
     }
 }

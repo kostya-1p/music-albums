@@ -28,7 +28,7 @@ class AlbumRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:150'],
             'artist' => ['required', 'string', 'max:150'],
-            'img' => ['image'],
+            'img' => ['required', 'image'],
             'description' => ['max:1000']
         ];
     }
