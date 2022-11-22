@@ -36,6 +36,14 @@ $(document).ready(function () {
             setDescription();
         }
     });
+
+    $(".backup_picture_album").on("error", function(){
+        $(this).attr('src', 'http://localhost:8000/images/albums/alternative.png');
+    });
+
+    $(".backup_picture_artist").on("error", function(){
+        $(this).attr('src', 'http://localhost:8000/images/artists/alternative.png');
+    });
 });
 
 function setDescription() {
@@ -73,5 +81,3 @@ function setDataToDataList(dataListId, data) {
         $dataList.append(`<option>${element}</option>`);
     });
 }
-
-

@@ -16,7 +16,8 @@
 
     @foreach($albums as $index => $album)
         <div class="album-container">
-            <img src="{{ url('images/albums/'.$album->img) }}" width="150px" height="150px" class="album-image"/>
+            <img src="{{ url('images/albums/'.$album->img) }}"
+                 width="150px" height="150px" class="album-image backup_picture_album"/>
             <p class="headingMd">Name: {{$album->name}}</p>
             <p class="headingMd">Artist: {{$album->artist->name}}</p>
             <p class="headingMd mb-2">Description:</p>
