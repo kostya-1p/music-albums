@@ -6,50 +6,31 @@ use Illuminate\Support\Facades\Http;
 
 class AlbumLastFmService
 {
-    public function loadArtistsAndImages(string $apiKey, string $albumName): array
+    public function loadArtistsInfo(string $apiKey, string $albumName): array
     {
         $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album=
         {$albumName}&api_key={$apiKey}&format=json");
 
         $responseArray = $response->json();
 
-        $artistsAndImages = [];
-        $artistsAndImages['artists'] = $this->getArrayOfArtists($responseArray);
-        $artistsAndImages['images'] = $this->getArrayOfImages($responseArray);
-
-        return $artistsAndImages;
+        return $this->getArtistsInfoFromResponse($responseArray);
     }
 
-    private function getArrayOfArtists(array $responseArray): array
+    private function getArtistsInfoFromResponse(array $responseArray): array
     {
-        $artistsArray = $this->getArrayFromResponse($responseArray, 'artist');
-        $uniqueArtists = array_unique($artistsArray);
-        return array_values($uniqueArtists);
-    }
-
-    private function getArrayOfImages(array $responseArray): array
-    {
-        $imagesFullArray = $this->getArrayFromResponse($responseArray, 'image');
-        $largeImages = [];
-        $indexLargeImages = 2;
-
-        foreach ($imagesFullArray as $image) {
-            $largeImages[] = $image[$indexLargeImages]['#text'];
-        }
-
-        return $largeImages;
-    }
-
-    private function getArrayFromResponse(array $responseArray, string $key): array
-    {
-        $array = [];
+        $artistsInfo = [];
         $albums = $responseArray['results']['albummatches']['album'];
 
+        $artistsKey = 'artist';
+        $albumKey = 'name';
+        $imageKey = 'image';
+        $largeImageIndex = 2;
+
         foreach ($albums as $album) {
-            $array[] = $album[$key];
+            $artistsInfo[$album[$artistsKey]] = array('album' => $album[$albumKey], 'image' => $album[$imageKey][$largeImageIndex]['#text']);
         }
 
-        return $array;
+        return $artistsInfo;
     }
 
     public function loadDescription(string $apiKey, string $albumName, string $artistName): string
