@@ -11,18 +11,28 @@ const doneTypingInterval = 2000;
 const $input = $('#name');
 const $artistInput = $('#artist');
 const $imageLinkInput = $('#image');
+let artistsInfo;
 
 $(document).ready(function () {
     if ($('#albumId').length) {
-        doneTyping();
+        doneTypingAlbum();
     }
 
     $input.on('keyup', function () {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        typingTimer = setTimeout(doneTypingAlbum, doneTypingInterval);
     });
 
     $input.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    $artistInput.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTypingArtist, doneTypingInterval);
+    });
+
+    $artistInput.on('keydown', function () {
         clearTimeout(typingTimer);
     });
 
@@ -37,11 +47,11 @@ $(document).ready(function () {
         }
     });
 
-    $(".backup_picture_album").on("error", function(){
+    $(".backup_picture_album").on("error", function () {
         $(this).attr('src', 'http://localhost:8000/images/albums/alternative.png');
     });
 
-    $(".backup_picture_artist").on("error", function(){
+    $(".backup_picture_artist").on("error", function () {
         $(this).attr('src', 'http://localhost:8000/images/artists/alternative.png');
     });
 });
@@ -61,17 +71,24 @@ function setDescription() {
     });
 }
 
-function doneTyping() {
+function doneTypingAlbum() {
     const albumName = $input.val();
 
     $.ajax({
         url: `http://localhost:8000/api/album_lastfm/${albumName}`,
         type: "GET",
         success: function (artistsImagesJson) {
-            setDataToDataList('#artistList', artistsImagesJson.artists);
-            setDataToDataList('#imageList', artistsImagesJson.images);
+            artistsInfo = artistsImagesJson;
+            setDataToDataList('#artistList', Object.keys(artistsImagesJson));
         }
     });
+}
+
+function doneTypingArtist() {
+    const artistName = $artistInput.val();
+    if (artistName in artistsInfo) {
+        $input.val(artistsInfo[artistName].album);
+    }
 }
 
 function setDataToDataList(dataListId, data) {
