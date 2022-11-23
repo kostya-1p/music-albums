@@ -6,11 +6,34 @@ use Illuminate\Support\Facades\Http;
 
 class AlbumLastFmService
 {
-    public function loadArtistsInfo(string $apiKey, string $albumName): array
-    {
-        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.search&album=
-        {$albumName}&api_key={$apiKey}&format=json");
+    private string $baseURL;
+    private string $lastfmApiKey;
+    private string $lastfmApiVersion;
 
+    public function __construct(string $baseURL, string $lastfmApiKey, string $lastfmApiVersion)
+    {
+        $this->baseURL = $baseURL;
+        $this->lastfmApiKey = $lastfmApiKey;
+        $this->lastfmApiVersion = $lastfmApiVersion;
+    }
+
+    private function buildURL(string $method, array $params): string
+    {
+        $url = $this->baseURL . '/' . $this->lastfmApiVersion . "/?api_key=$this->lastfmApiKey";
+        $url .= "&method=$method";
+
+        foreach ($params as $paramKey => $paramValue) {
+            $url .= "&$paramKey=$paramValue";
+        }
+        return $url;
+    }
+
+    public function loadArtistsInfo(string $albumName): array
+    {
+        $urlParams = array('album' => $albumName, 'format' => 'json');
+        $url = $this->buildURL('album.search', $urlParams);
+
+        $response = Http::get($url);
         $responseArray = $response->json();
 
         return $this->getArtistsInfoFromResponse($responseArray);
@@ -33,11 +56,12 @@ class AlbumLastFmService
         return $artistsInfo;
     }
 
-    public function loadDescription(string $apiKey, string $albumName, string $artistName): string
+    public function loadDescription(string $albumName, string $artistName): string
     {
-        $response = Http::get("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=
-        {$apiKey}&artist={$artistName}&album={$albumName}&format=json");
+        $urlParams = array('album' => $albumName, 'artist' => $artistName, 'format' => 'json');
+        $url = $this->buildURL('album.getinfo', $urlParams);
 
+        $response = Http::get($url);
         $responseArray = $response->json();
         $description = '';
 

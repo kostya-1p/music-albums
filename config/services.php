@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'lastfm_api' => [
+        'domain' => env('LASTFM_API_DOMAIN'),
+        'api_version' => env('LASTFM_API_VERSION'),
+        'api_key' => env('LASTFM_API_KEY'),
+    ],
 ];
