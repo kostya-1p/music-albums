@@ -41,7 +41,7 @@
             @error('img')
             <div style="color: red">{{ $message }}</div>
             @enderror
-            <x-input type="file" id="image" name="img" class="block mt-1 mb-10 w-full"  accept="image/*"
+            <input type="file" id="image" name="img" class="block mt-1 mb-10 w-full"  accept="image/*"
                      required/>
 
             <datalist id="imageList"></datalist>

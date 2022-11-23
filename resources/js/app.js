@@ -10,7 +10,7 @@ let typingTimer;
 const doneTypingInterval = 2000;
 const $input = $('#name');
 const $artistInput = $('#artist');
-const $imageLinkInput = $('#image');
+const $imageInput = $('#image');
 let artistsInfo;
 
 $(document).ready(function () {
@@ -34,11 +34,6 @@ $(document).ready(function () {
 
     $artistInput.on('keydown', function () {
         clearTimeout(typingTimer);
-    });
-
-    $imageLinkInput.on('change', function () {
-        const link = $imageLinkInput.val();
-        $('#albumImagePreview').attr('src', link);
     });
 
     $('#name, #artist').on('blur', function () {
@@ -88,6 +83,8 @@ function doneTypingArtist() {
     const artistName = $artistInput.val();
     if (artistName in artistsInfo) {
         $input.val(artistsInfo[artistName].album);
+        setDescription();
+        loadURLToInputFile(artistsInfo[artistName].image);
     }
 }
 
@@ -97,4 +94,25 @@ function setDataToDataList(dataListId, data) {
     data.forEach(element => {
         $dataList.append(`<option>${element}</option>`);
     });
+}
+
+function loadURLToInputFile(url) {
+    getImgURL(url, (imgBlob) => {
+        let fileName = 'lastfm_image.' + imgBlob.type.split("/").pop();
+        let file = new File([imgBlob], fileName, {type: imgBlob.type, lastModified: new Date().getTime()}, 'utf-8');
+        let container = new DataTransfer();
+
+        container.items.add(file);
+        $imageInput[0].files = container.files;
+    })
+}
+
+function getImgURL(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        callback(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
 }
