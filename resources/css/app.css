@@ -11,6 +11,10 @@
     border: thick solid #9ca3af;
 }
 
+.center {
+    text-align: center;
+}
+
 .album-image {
     float: right;
     margin-left: 30px;
