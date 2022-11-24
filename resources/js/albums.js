@@ -49,7 +49,19 @@ $(document).ready(function () {
     $(".backup_picture_artist").on("error", function () {
         $(this).attr('src', 'http://localhost:8000/images/artists/alternative.png');
     });
+
+    $imageInput.on('change', function () {
+        loadInputFieldToPreview($('#albumImagePreview'));
+    });
 });
+
+function loadInputFieldToPreview(imgElement) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        imgElement.attr('src', e.target.result);
+    }
+    reader.readAsDataURL(document.querySelector('#image').files[0]); // convert to base64 string
+}
 
 function setDescription() {
     const albumName = $input.val();
