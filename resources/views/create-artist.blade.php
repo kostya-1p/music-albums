@@ -30,8 +30,10 @@
             @error('name')
             <div style="color: red">{{ $message }}</div>
             @enderror
-            <x-input id="name" class="block mt-1 mb-10 w-full" type="text" name="name"
+            <x-input list="nameList" id="name" class="block mt-1 mb-10 w-full" type="text" name="name"
                      value="{{($isEditPage) ? $artist->name : ''}}" required/>
+
+            <datalist id="nameList"></datalist>
 
             <x-label for="image" value="Image"/>
             @error('img')
