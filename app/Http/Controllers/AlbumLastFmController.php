@@ -17,7 +17,7 @@ class AlbumLastFmController extends Controller
 
     public function index(string $albumName): JsonResponse
     {
-        $artistsAndImages = $this->albumLastFmService->loadArtistsInfo($albumName);
+        $artistsAndImages = $this->albumLastFmService->loadAlbumInfo($albumName);
         return response()->json($artistsAndImages);
     }
 

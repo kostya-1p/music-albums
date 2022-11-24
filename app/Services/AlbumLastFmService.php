@@ -28,7 +28,7 @@ class AlbumLastFmService
         return $url;
     }
 
-    public function loadArtistsInfo(string $albumName): array
+    public function loadAlbumInfo(string $albumName): array
     {
         $urlParams = array('album' => $albumName, 'format' => 'json');
         $url = $this->buildURL('album.search', $urlParams);
@@ -36,12 +36,12 @@ class AlbumLastFmService
         $response = Http::get($url);
         $responseArray = $response->json();
 
-        return $this->getArtistsInfoFromResponse($responseArray);
+        return $this->getAlbumInfoFromResponse($responseArray);
     }
 
-    private function getArtistsInfoFromResponse(array $responseArray): array
+    private function getAlbumInfoFromResponse(array $responseArray): array
     {
-        $artistsInfo = [];
+        $albumsInfo = [];
         $albums = $responseArray['results']['albummatches']['album'];
 
         $artistsKey = 'artist';
@@ -50,10 +50,10 @@ class AlbumLastFmService
         $largeImageIndex = 2;
 
         foreach ($albums as $album) {
-            $artistsInfo[$album[$artistsKey]] = array('album' => $album[$albumKey], 'image' => $album[$imageKey][$largeImageIndex]['#text']);
+            $albumsInfo[$album[$artistsKey]] = array('album' => $album[$albumKey], 'image' => $album[$imageKey][$largeImageIndex]['#text']);
         }
 
-        return $artistsInfo;
+        return $albumsInfo;
     }
 
     public function loadDescription(string $albumName, string $artistName): string

@@ -24,3 +24,7 @@ Route::controller(\App\Http\Controllers\AlbumLastFmController::class)->group(fun
     Route::get('/album_lastfm/description/{albumName}/{artistName}', 'indexDescription')->
     name('album_lastfm.index_description');
 });
+
+Route::controller(\App\Http\Controllers\ArtistLastFmController::class)->group(function () {
+    Route::get('/artist_lastfm/{albumName}', 'index')->name('artist_lastfm.index');
+});
