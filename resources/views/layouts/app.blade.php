@@ -12,7 +12,8 @@
 
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css'])
+        @stack('scripts')
     </head>
     <body>
         <div class="min-h-screen bg-gray-100">

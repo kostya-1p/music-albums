@@ -1,6 +1,10 @@
 <x-app-layout>
     {{$isEditPage = isset($album)}}
 
+    @push('scripts')
+        @vite(['resources/js/albums.js'])
+    @endpush
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if($isEditPage)
