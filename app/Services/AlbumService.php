@@ -36,15 +36,6 @@ class AlbumService
         return $album->save();
     }
 
-    private function downloadImageToStorage(string $url): string
-    {
-        $imageFile = file_get_contents($url);
-        $imageInfo = pathinfo($url);
-        $imageName = $imageInfo['basename'];
-        Storage::disk('images')->put("albums/$imageName", $imageFile);
-        return $imageName;
-    }
-
     private function storeImage(UploadedFile $file): string
     {
         $fileName = time() . '.' . $file->extension();

@@ -35,18 +35,6 @@ class ArtistService
         return $artist->save();
     }
 
-    private function downloadImageToStorage(?string $url): ?string
-    {
-        if (isset($url)) {
-            $imageFile = file_get_contents($url);
-            $imageInfo = pathinfo($url);
-            $imageName = $imageInfo['basename'];
-            Storage::disk('images')->put("artists/$imageName", $imageFile);
-            return $imageName;
-        }
-        return null;
-    }
-
     private function storeImage(?UploadedFile $file): ?string
     {
         if (isset($file)) {
