@@ -23,9 +23,19 @@ $(document).ready(function () {
     });
 
     $imageInput.on('change', function () {
-        loadInputFieldToPreview($('#albumImagePreview'));
+        loadInputFieldToPreview($('#artist_image_preview'));
     });
 });
+
+function getImageLink(artistName, artists) {
+    for (let i = 0; i < artists.length; i++) {
+        if (artists[i]['name'] === artistName) {
+            return artists[i]['image'];
+        }
+    }
+
+    return '';
+}
 
 function loadInputFieldToPreview(imgElement) {
     const reader = new FileReader();
@@ -44,6 +54,11 @@ function doneTypingArtist() {
         success: function (artists) {
             artistsInfo = artists;
             setDataToDataList('#nameList', getArrayOfNames(artists));
+            const artistName = $input.val();
+            let imageLink = getImageLink(artistName, artists);
+
+            if (imageLink !== '')
+                loadURLToInputFile(imageLink);
         }
     });
 }
