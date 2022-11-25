@@ -8,7 +8,7 @@
     <form method="GET" action="{{ route('albums.indexFiltered') }}">
         <div class="center">
             <select name="artist">
-                @foreach(\App\Models\Artist::select('name')->distinct()->get() as $artist)
+                @foreach($artistsForFilter as $artist)
                     <option>{{$artist->name}}</option>
                 @endforeach
             </select>

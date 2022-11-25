@@ -13,7 +13,6 @@ use App\Services\AlbumService;
 use App\Services\ArtistService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
 {
@@ -37,13 +36,15 @@ class AlbumController extends Controller
     public function index(): View
     {
         $albums = $this->albumRepository->getAllPaginated(5);
-        return view('albums', compact('albums'));
+        $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
+        return view('albums', compact('albums', 'artistsForFilter'));
     }
 
     public function indexFiltered(FilterRequest $request): View
     {
         $albums = $this->albumRepository->getFilteredByArtist($request->artist, 5);
-        return view('albums', compact('albums'));
+        $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
+        return view('albums', compact('albums', 'artistsForFilter'));
     }
 
     public function create(): View

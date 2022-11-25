@@ -14,6 +14,11 @@ class ArtistRepository implements ArtistRepositoryInterface
         return Artist::paginate($pageSize);
     }
 
+    public function getAllByUniqueNames(): Collection
+    {
+        return Artist::select('name')->distinct()->get();
+    }
+
     public function getFiltered(string $artistName, int $pageSize): LengthAwarePaginator
     {
         return Artist::where('name', $artistName)->paginate($pageSize);

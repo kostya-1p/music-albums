@@ -28,13 +28,15 @@ class ArtistController extends Controller
     public function index(): View
     {
         $artists = $this->artistRepository->getAllPaginated(5);
-        return view('artists', compact('artists'));
+        $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
+        return view('artists', compact('artists', 'artistsForFilter'));
     }
 
     public function indexFiltered(FilterRequest $request): View
     {
         $artists = $this->artistRepository->getFiltered($request->artist, 5);
-        return view('artists', compact('artists'));
+        $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
+        return view('artists', compact('artists', 'artistsForFilter'));
     }
 
     public function create(): View
