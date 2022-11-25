@@ -25,7 +25,7 @@ class AlbumFactory extends Factory
             'name' => $this->faker->word(),
             'artist_id' => $this->faker->numberBetween(1, Artist::count()),
             'description' => $this->faker->realText(),
-            'img' => basename($storageImagePaths[$randFileNameIndex]),
+            'img' => empty($storageImagePaths) ? 'alternative.png' : basename($storageImagePaths[$randFileNameIndex]),
         ];
     }
 }
