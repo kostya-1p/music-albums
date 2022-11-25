@@ -1,5 +1,6 @@
 *
 !public/
 !.gitignore
-!images/albums/alternative.png
-!images/artists/alternative.png
+!images
+!images/albums
+!images/artists
