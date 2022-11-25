@@ -77,7 +77,9 @@ class AlbumController extends Controller
     public function update(AlbumRequest $request): RedirectResponse
     {
         $album = $this->albumRepository->getById($request->id);
+        $oldAlbum = $this->albumRepository->getById($request->id);
         $artist = $this->artistRepository->getByName($request->artist);
+
         if (!isset($artist)) {
             $artist = $this->artistService->make(['name' => $request->artist, 'img' => null]);
         }
@@ -88,9 +90,8 @@ class AlbumController extends Controller
             return redirect(RouteServiceProvider::HOME);
         }
 
-        $oldAlbum = clone $album;
         $this->albumService->edit($album, $request->validated(), $artist->id);
-        $this->albumLogger->logEditedAlbum($oldAlbum, $request->validated());
+        $this->albumLogger->logEditedAlbum($oldAlbum, $album);
 
         return redirect(RouteServiceProvider::HOME);
     }

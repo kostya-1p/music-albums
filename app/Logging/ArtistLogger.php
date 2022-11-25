@@ -17,16 +17,16 @@ class ArtistLogger
             'artist_image' => $artistData['img']]);
     }
 
-    public function logEditedArtist(Artist $oldArtistData, array $newArtistData): void
+    public function logEditedArtist(Artist $oldArtist, Artist $newArtist): void
     {
         Log::channel('artists_changes')->info('Artist edited', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
-            'artist_id' => $oldArtistData->id,
-            'old_artist_name' => $oldArtistData->name,
-            'old_artist_img' => $oldArtistData->img,
-            'new_artist_name' => $newArtistData['name'],
-            'new_artist_img' => $newArtistData['img']]);
+            'artist_id' => $oldArtist->id,
+            'old_artist_name' => $oldArtist->name,
+            'old_artist_img' => $oldArtist->img,
+            'new_artist_name' => $newArtist->name,
+            'new_artist_img' => $newArtist->img]);
     }
 
     public function logDeletedArtist(Artist $artist): void

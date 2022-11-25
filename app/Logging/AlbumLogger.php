@@ -17,18 +17,18 @@ class AlbumLogger
             'album_artist' => $albumData['artist']]);
     }
 
-    public function logEditedAlbum(Album $oldAlbumData, array $newAlbumData): void
+    public function logEditedAlbum(Album $oldAlbum, Album $newAlbum): void
     {
         Log::channel('albums_changes')->info('Album edited', [
             'user_id' => Auth::id(),
             'user_name' => Auth::user()->name,
-            'album_id' => $oldAlbumData->id,
-            'old_album_name' => $oldAlbumData->name,
-            'old_album_artist' => $oldAlbumData->artist->name,
-            'old_album_img' => $oldAlbumData->img,
-            'new_album_name' => $newAlbumData['name'],
-            'new_album_artist' => $newAlbumData['artist'],
-            'new_album_img' => $newAlbumData['img']]);
+            'album_id' => $oldAlbum->id,
+            'old_album_name' => $oldAlbum->name,
+            'old_album_artist' => $oldAlbum->artist->name,
+            'old_album_img' => $oldAlbum->img,
+            'new_album_name' => $newAlbum->name,
+            'new_album_artist' => $newAlbum->artist->name,
+            'new_album_img' => $newAlbum->img]);
     }
 
     public function logDeletedAlbum(Album $album): void

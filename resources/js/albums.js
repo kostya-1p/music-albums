@@ -109,14 +109,16 @@ function setDataToDataList(dataListId, data) {
 }
 
 function loadURLToInputFile(url) {
-    getImgURL(url, (imgBlob) => {
-        let fileName = 'lastfm_image.' + imgBlob.type.split("/").pop();
-        let file = new File([imgBlob], fileName, {type: imgBlob.type, lastModified: new Date().getTime()}, 'utf-8');
-        let container = new DataTransfer();
+    if (url !== '') {
+        getImgURL(url, (imgBlob) => {
+            let fileName = 'lastfm_image.' + imgBlob.type.split("/").pop();
+            let file = new File([imgBlob], fileName, {type: imgBlob.type, lastModified: new Date().getTime()}, 'utf-8');
+            let container = new DataTransfer();
 
-        container.items.add(file);
-        $imageInput[0].files = container.files;
-    })
+            container.items.add(file);
+            $imageInput[0].files = container.files;
+        })
+    }
 }
 
 function getImgURL(url, callback) {

@@ -63,15 +63,16 @@ class ArtistController extends Controller
     public function update(ArtistRequest $request): RedirectResponse
     {
         $artist = $this->artistRepository->getById($request->id);
+        $oldArtist = $this->artistRepository->getById($request->id);
+
         if (!isset($artist)) {
             $this->artistService->make($request->validated());
             $this->artistLogger->logAddedArtist($request->validated());
             return redirect()->route('artists.index');
         }
 
-        $oldArtist = clone $artist;
         $this->artistService->edit($artist, $request->validated());
-        $this->artistLogger->logEditedArtist($oldArtist, $request->validated());
+        $this->artistLogger->logEditedArtist($oldArtist, $artist);
 
         return redirect()->route('artists.index');
     }
