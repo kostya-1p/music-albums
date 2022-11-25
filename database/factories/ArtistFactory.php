@@ -23,7 +23,7 @@ class ArtistFactory extends Factory
 
         return [
             'name' => $this->faker->name(),
-            'img' => basename($storageImagePaths[$randFileNameIndex]),
+            'img' => empty($storageImagePaths) ? 'alternative.png' : basename($storageImagePaths[$randFileNameIndex]),
         ];
     }
 }
