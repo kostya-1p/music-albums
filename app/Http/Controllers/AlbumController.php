@@ -22,10 +22,13 @@ class AlbumController extends Controller
     private ArtistRepositoryInterface $artistRepository;
     private ArtistService $artistService;
 
-    public function __construct(AlbumRepositoryInterface $albumRepository, AlbumService $albumService,
-                                AlbumLogger              $albumLogger, ArtistRepositoryInterface $artistRepository,
-                                ArtistService            $artistService)
-    {
+    public function __construct(
+        AlbumRepositoryInterface  $albumRepository,
+        AlbumService $albumService,
+        AlbumLogger $albumLogger,
+        ArtistRepositoryInterface $artistRepository,
+        ArtistService $artistService
+    ) {
         $this->albumRepository = $albumRepository;
         $this->albumService = $albumService;
         $this->albumLogger = $albumLogger;

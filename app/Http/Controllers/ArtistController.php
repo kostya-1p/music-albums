@@ -17,9 +17,11 @@ class ArtistController extends Controller
     private ArtistService $artistService;
     private ArtistLogger $artistLogger;
 
-    public function __construct(ArtistRepositoryInterface $artistRepository, ArtistService $artistService,
-                                ArtistLogger              $artistLogger)
-    {
+    public function __construct(
+        ArtistRepositoryInterface $artistRepository,
+        ArtistService $artistService,
+        ArtistLogger $artistLogger
+    ) {
         $this->artistRepository = $artistRepository;
         $this->artistService = $artistService;
         $this->artistLogger = $artistLogger;
