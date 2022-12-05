@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ArtistService
 {
-    public function make(array $artistData): Artist
+    public function make(array $artistData): bool
     {
         $artist = new Artist();
-        $this->storeArtist($artist, $artistData);
-        return $artist;
+        return $this->storeArtist($artist, $artistData);
     }
 
     public function edit(Artist $artist, array $artistData): bool

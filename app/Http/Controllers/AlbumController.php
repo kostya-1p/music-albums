@@ -71,7 +71,8 @@ class AlbumController extends Controller
         $artist = $this->artistRepository->getByName($request->artist);
 
         if (!isset($artist)) {
-            $artist = $this->artistService->make(['name' => $request->artist, 'img' => null]);
+            $this->artistService->make(['name' => $request->artist, 'img' => null]);
+            $artist = $this->artistRepository->getByName($request->artist);
         }
         $this->albumService->make($request->validated(), $artist->id);
         $this->albumLogger->logAddedAlbum($request->validated());
@@ -85,7 +86,8 @@ class AlbumController extends Controller
         $artist = $this->artistRepository->getByName($request->artist);
 
         if (!isset($artist)) {
-            $artist = $this->artistService->make(['name' => $request->artist, 'img' => null]);
+            $this->artistService->make(['name' => $request->artist, 'img' => null]);
+            $artist = $this->artistRepository->getByName($request->artist);
         }
 
         if (!isset($album)) {
