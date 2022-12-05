@@ -10,6 +10,10 @@ class ArtistLastFmService
     private string $lastfmApiKey;
     private string $lastfmApiVersion;
 
+    private const ARTIST_KEY = 'name';
+    private const IMAGE_KEY = 'image';
+    private const LARGE_IMAGE_INDEX = 2;
+
     public function __construct(string $baseURL, string $lastfmApiKey, string $lastfmApiVersion)
     {
         $this->baseURL = $baseURL;
@@ -44,12 +48,11 @@ class ArtistLastFmService
         $artistsInfo = [];
         $artists = $responseArray['results']['artistmatches']['artist'];
 
-        $artistKey = 'name';
-        $imageKey = 'image';
-        $largeImageIndex = 2;
-
         foreach ($artists as $artist) {
-            $artistsInfo[] = array($artistKey => $artist[$artistKey], $imageKey => $artist[$imageKey][$largeImageIndex]['#text']);
+            $artistsInfo[] = [
+                self::ARTIST_KEY => $artist[self::ARTIST_KEY],
+                self::IMAGE_KEY => $artist[self::IMAGE_KEY][self::LARGE_IMAGE_INDEX]['#text'],
+            ];
         }
 
         return $artistsInfo;

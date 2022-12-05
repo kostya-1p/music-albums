@@ -10,6 +10,11 @@ class AlbumLastFmService
     private string $lastfmApiKey;
     private string $lastfmApiVersion;
 
+    private const ARTISTS_KEY = 'artist';
+    private const ALBUM_KEY = 'name';
+    private const IMAGE_KEY = 'image';
+    private const LARGE_IMAGE_INDEX = 2;
+
     public function __construct()
     {
         $this->baseURL = config('services.lastfm_api.domain');
@@ -44,13 +49,11 @@ class AlbumLastFmService
         $albumsInfo = [];
         $albums = $responseArray['results']['albummatches']['album'];
 
-        $artistsKey = 'artist';
-        $albumKey = 'name';
-        $imageKey = 'image';
-        $largeImageIndex = 2;
-
         foreach ($albums as $album) {
-            $albumsInfo[$album[$artistsKey]] = array('album' => $album[$albumKey], 'image' => $album[$imageKey][$largeImageIndex]['#text']);
+            $albumsInfo[$album[self::ARTISTS_KEY]] = [
+                'album' => $album[self::ALBUM_KEY],
+                'image' => $album[self::IMAGE_KEY][self::LARGE_IMAGE_INDEX]['#text'],
+            ];
         }
 
         return $albumsInfo;
