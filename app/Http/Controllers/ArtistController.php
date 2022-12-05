@@ -16,6 +16,7 @@ class ArtistController extends Controller
     private ArtistRepositoryInterface $artistRepository;
     private ArtistService $artistService;
     private ArtistLogger $artistLogger;
+    private const PAGE_SIZE = 5;
 
     public function __construct(
         ArtistRepositoryInterface $artistRepository,
@@ -29,14 +30,14 @@ class ArtistController extends Controller
 
     public function index(): View
     {
-        $artists = $this->artistRepository->getAllPaginated(5);
+        $artists = $this->artistRepository->getAllPaginated(self::PAGE_SIZE);
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('artists', compact('artists', 'artistsForFilter'));
     }
 
     public function indexFiltered(FilterRequest $request): View
     {
-        $artists = $this->artistRepository->getFiltered($request->artist, 5);
+        $artists = $this->artistRepository->getFiltered($request->artist, self::PAGE_SIZE);
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('artists', compact('artists', 'artistsForFilter'));
     }

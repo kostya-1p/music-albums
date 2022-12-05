@@ -21,6 +21,7 @@ class AlbumController extends Controller
     private AlbumLogger $albumLogger;
     private ArtistRepositoryInterface $artistRepository;
     private ArtistService $artistService;
+    private const PAGE_SIZE = 5;
 
     public function __construct(
         AlbumRepositoryInterface  $albumRepository,
@@ -38,14 +39,14 @@ class AlbumController extends Controller
 
     public function index(): View
     {
-        $albums = $this->albumRepository->getAllPaginated(5);
+        $albums = $this->albumRepository->getAllPaginated(self::PAGE_SIZE);
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('albums', compact('albums', 'artistsForFilter'));
     }
 
     public function indexFiltered(FilterRequest $request): View
     {
-        $albums = $this->albumRepository->getFilteredByArtist($request->artist, 5);
+        $albums = $this->albumRepository->getFilteredByArtist($request->artist, self::PAGE_SIZE);
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('albums', compact('albums', 'artistsForFilter'));
     }
