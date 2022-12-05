@@ -9,10 +9,9 @@ class AlbumLastFmController extends Controller
 {
     private AlbumLastFmService $albumLastFmService;
 
-    public function __construct()
+    public function __construct(AlbumLastFmService $albumLastFmService)
     {
-        $this->albumLastFmService = new AlbumLastFmService(config('services.lastfm_api.domain'),
-            config('services.lastfm_api.api_key'), config('services.lastfm_api.api_version'));
+        $this->albumLastFmService = $albumLastFmService;
     }
 
     public function index(string $albumName): JsonResponse
@@ -24,9 +23,6 @@ class AlbumLastFmController extends Controller
     public function indexDescription(string $albumName, string $artistName): JsonResponse
     {
         $description = $this->albumLastFmService->loadDescription($albumName, $artistName);
-        if (empty($description)) {
-            response()->json(['description' => $description], 204);
-        }
         return response()->json(['description' => $description]);
     }
 }

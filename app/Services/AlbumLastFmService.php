@@ -10,11 +10,11 @@ class AlbumLastFmService
     private string $lastfmApiKey;
     private string $lastfmApiVersion;
 
-    public function __construct(string $baseURL, string $lastfmApiKey, string $lastfmApiVersion)
+    public function __construct()
     {
-        $this->baseURL = $baseURL;
-        $this->lastfmApiKey = $lastfmApiKey;
-        $this->lastfmApiVersion = $lastfmApiVersion;
+        $this->baseURL = config('services.lastfm_api.domain');
+        $this->lastfmApiKey = config('services.lastfm_api.api_key');
+        $this->lastfmApiVersion = config('services.lastfm_api.api_version');
     }
 
     private function buildURL(string $method, array $params): string
@@ -56,19 +56,18 @@ class AlbumLastFmService
         return $albumsInfo;
     }
 
-    public function loadDescription(string $albumName, string $artistName): string
+    public function loadDescription(string $albumName, string $artistName): ?string
     {
         $urlParams = array('album' => $albumName, 'artist' => $artistName, 'format' => 'json');
         $url = $this->buildURL('album.getinfo', $urlParams);
 
         $response = Http::get($url);
         $responseArray = $response->json();
-        $description = '';
 
         if (array_key_exists('album', $responseArray) && array_key_exists('wiki', $responseArray['album'])) {
-            $description = $responseArray['album']['wiki']['summary'];
+            return $responseArray['album']['wiki']['summary'];
         }
 
-        return $description;
+        return null;
     }
 }

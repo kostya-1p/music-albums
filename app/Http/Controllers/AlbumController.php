@@ -24,7 +24,7 @@ class AlbumController extends Controller
     private const PAGE_SIZE = 5;
 
     public function __construct(
-        AlbumRepositoryInterface  $albumRepository,
+        AlbumRepositoryInterface $albumRepository,
         AlbumService $albumService,
         AlbumLogger $albumLogger,
         ArtistRepositoryInterface $artistRepository,
