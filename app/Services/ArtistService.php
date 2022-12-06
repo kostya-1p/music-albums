@@ -37,7 +37,7 @@ class ArtistService
     private function storeImage(?UploadedFile $file): ?string
     {
         if (isset($file)) {
-            $fileName = time() . '.' . $file->extension();
+            $fileName = uniqid(more_entropy: true) . '.' . $file->extension();
             $file->move(storage_path('app/images/artists'), $fileName);
             return $fileName;
         }

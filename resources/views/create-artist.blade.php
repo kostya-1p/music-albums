@@ -1,5 +1,7 @@
 <x-app-layout>
-    {{$isEditPage = isset($artist)}}
+    @php
+        $isEditPage = isset($artist)
+    @endphp
 
     @push('scripts')
         @vite(['resources/js/artists.js'])

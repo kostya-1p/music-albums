@@ -1,5 +1,7 @@
 <x-app-layout>
-    {{$isEditPage = isset($album)}}
+    @php
+        $isEditPage = isset($album)
+    @endphp
 
     @push('scripts')
         @vite(['resources/js/albums.js'])

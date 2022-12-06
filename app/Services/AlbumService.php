@@ -38,7 +38,7 @@ class AlbumService
 
     private function storeImage(UploadedFile $file): string
     {
-        $fileName = time() . '.' . $file->extension();
+        $fileName = uniqid(more_entropy: true) . '.' . $file->extension();
         $file->move(storage_path('app/images/albums'), $fileName);
         return $fileName;
     }
