@@ -46,13 +46,13 @@
             <img id="artist_image_preview" src="{{($isEditPage) ? url("images/artists/{$artist->img}") : ''}}" alt=""
                  class="backup_picture_artist">
 
-            <x-button>
+            <button class="button">
                 @if($isEditPage)
                     Edit
                 @else
                     Add
                 @endif
-            </x-button>
+            </button>
         </div>
     </form>
 </x-app-layout>

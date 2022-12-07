@@ -60,13 +60,13 @@
             <textarea id="description" rows="6" name="description"
                       class="block mt-1 mb-10 w-full">{{($isEditPage) ? $album->description : ''}}</textarea>
 
-            <x-button>
+            <button class="button">
                 @if($isEditPage)
                     Edit
                 @else
                     Add
                 @endif
-            </x-button>
+            </button>
         </div>
     </form>
 </x-app-layout>

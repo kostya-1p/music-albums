@@ -12,7 +12,9 @@
                     <option>{{$artist->name}}</option>
                 @endforeach
             </select>
-            <button type="submit" id="submit_filter" class="btn btn-primary">Filter</button>
+            <button type="submit" id="submit_filter" class="ml-3 btn btn-primary album_button" style="border-radius: 0">
+                Filter
+            </button>
         </div>
     </form>
 
@@ -40,9 +42,9 @@
     <br>
 
     @auth
-        <x-button class="ml-60 mt-10 mb-10">
+        <button class="ml-60 mt-10 mb-10 button">
             <a href="{{route('artists.create')}}">Add Artist</a>
-        </x-button>
+        </button>
     @endauth
 
     <div class="d-flex justify-content-center mb-10 ml-60 mr-60 mt-5">
