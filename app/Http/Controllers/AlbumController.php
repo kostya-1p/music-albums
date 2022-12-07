@@ -46,7 +46,10 @@ class AlbumController extends Controller
 
     public function indexFiltered(FilterRequest $request): View
     {
-        $albums = $this->albumRepository->getFilteredByArtist($request->artist, self::PAGE_SIZE);
+        $albums = $request->artist === 'All'
+            ? $this->albumRepository->getAllPaginated(self::PAGE_SIZE)
+            : $this->albumRepository->getFilteredByArtist($request->artist, self::PAGE_SIZE);
+
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('albums', compact('albums', 'artistsForFilter'));
     }
