@@ -43,7 +43,8 @@
             @enderror
             <x-input id="image" name="img" class="block mt-1 mb-10 w-full" type="file" required/>
 
-            <img id="artist_image_preview" src="" alt="">
+            <img id="artist_image_preview" src="{{($isEditPage) ? url("images/artists/{$artist->img}") : ''}}" alt=""
+                 class="backup_picture_artist">
 
             <x-button>
                 @if($isEditPage)

@@ -25,6 +25,17 @@ $(document).ready(function () {
     $imageInput.on('change', function () {
         loadInputFieldToPreview($('#artist_image_preview'));
     });
+
+    $(".backup_picture_artist").on("error", function () {
+        $(this).attr('src', 'http://localhost:8000/images/artists/alternative.png');
+        if($(this).attr('id') === 'artist_image_preview') {
+            loadURLToInputFile($('#artist_image_preview').attr('src'));
+        }
+    });
+
+    if($('#artist_image_preview').attr('src') !== '') {
+        loadURLToInputFile($('#artist_image_preview').attr('src'));
+    }
 });
 
 function getImageLink(artistName, artists) {
@@ -81,7 +92,7 @@ function setDataToDataList(dataListId, data) {
 
 function loadURLToInputFile(url) {
     getImgURL(url, (imgBlob) => {
-        let fileName = 'lastfm_image.' + imgBlob.type.split("/").pop();
+        let fileName = 'image.' + imgBlob.type.split("/").pop();
         let file = new File([imgBlob], fileName, {type: imgBlob.type, lastModified: new Date().getTime()}, 'utf-8');
         let container = new DataTransfer();
 

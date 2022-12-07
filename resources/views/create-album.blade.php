@@ -50,7 +50,8 @@
             <input type="file" id="image" name="img" class="block mt-1 mb-10 w-full"  accept="image/*"
                      required/>
 
-            <img id="albumImagePreview" src="" alt="">
+            <img id="albumImagePreview" src="{{($isEditPage) ? url("images/albums/{$album->img}") : ''}}"
+                 alt="" class="backup_picture_album">
 
             <x-label for="description" value="Description"/>
             @error('description')

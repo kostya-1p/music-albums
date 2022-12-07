@@ -44,6 +44,9 @@ $(document).ready(function () {
 
     $(".backup_picture_album").on("error", function () {
         $(this).attr('src', 'http://localhost:8000/images/albums/alternative.png');
+        if($(this).attr('id') === 'albumImagePreview') {
+            loadURLToInputFile($('#albumImagePreview').attr('src'));
+        }
     });
 
     $(".backup_picture_artist").on("error", function () {
@@ -53,6 +56,10 @@ $(document).ready(function () {
     $imageInput.on('change', function () {
         loadInputFieldToPreview($('#albumImagePreview'));
     });
+
+    if($('#albumImagePreview').attr('src') !== '') {
+        loadURLToInputFile($('#albumImagePreview').attr('src'));
+    }
 });
 
 function loadInputFieldToPreview(imgElement) {
@@ -97,6 +104,7 @@ function doneTypingArtist() {
         $input.val(artistsInfo[artistName].album);
         setDescription();
         loadURLToInputFile(artistsInfo[artistName].image);
+        loadInputFieldToPreview($('#albumImagePreview'));
     }
 }
 
@@ -111,7 +119,7 @@ function setDataToDataList(dataListId, data) {
 function loadURLToInputFile(url) {
     if (url !== '') {
         getImgURL(url, (imgBlob) => {
-            let fileName = 'lastfm_image.' + imgBlob.type.split("/").pop();
+            let fileName = 'image.' + imgBlob.type.split("/").pop();
             let file = new File([imgBlob], fileName, {type: imgBlob.type, lastModified: new Date().getTime()}, 'utf-8');
             let container = new DataTransfer();
 
