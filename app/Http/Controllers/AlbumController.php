@@ -107,13 +107,20 @@ class AlbumController extends Controller
 
     public function destroy(DeleteAlbumRequest $request): RedirectResponse
     {
-        $album = $this->albumRepository->getById($request->id);
+        $data = $request->validated();
+        $album = $this->albumRepository->getById($data['id']);
         if (!isset($album)) {
             return redirect(RouteServiceProvider::HOME);
         }
 
         $this->albumLogger->logDeletedAlbum($album);
         $this->albumService->delete($album);
+
+        if ($data['count'] == 1 && $data['currentPage'] != 1) {
+            $pageNumber = $request->currentPage - 1;
+            $url = route('albums.index') . "?page={$pageNumber}";
+            return redirect($url);
+        }
 
         return redirect()->back();
     }

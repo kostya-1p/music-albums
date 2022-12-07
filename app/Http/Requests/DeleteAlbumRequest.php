@@ -26,6 +26,8 @@ class DeleteAlbumRequest extends FormRequest
     {
         return [
             'id' => ['required', 'integer'],
+            'count' => ['required', 'integer'],
+            'currentPage' => ['required', 'integer'],
         ];
     }
 }

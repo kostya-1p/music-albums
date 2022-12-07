@@ -38,6 +38,8 @@
                 @csrf
                 @method('DELETE')
                 <input type="hidden" name="id" value={{$album->id}}>
+                <input type="hidden" name="count" value="{{count($albums)}}">
+                <input type="hidden" name="currentPage" value="{{$albums->currentPage()}}">
                 <button class="album_button">DELETE</button>
             </form>
         @endauth
