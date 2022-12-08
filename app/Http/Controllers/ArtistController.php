@@ -66,7 +66,7 @@ class ArtistController extends Controller
     public function update(ArtistRequest $request): RedirectResponse
     {
         $artist = $this->artistRepository->getById($request->id);
-        $oldArtist = $this->artistRepository->getById($request->id);
+        $oldArtist = clone $artist;
 
         if (!isset($artist)) {
             $this->artistService->make($request->validated());
@@ -89,6 +89,12 @@ class ArtistController extends Controller
 
         $this->artistLogger->logDeletedArtist($artist);
         $this->artistService->delete($artist);
+
+        if ($request->count == 1 && $request->currentPage != 1) {
+            $pageNumber = $request->currentPage - 1;
+            $url = route('artists.index') . "?page={$pageNumber}";
+            return redirect($url);
+        }
 
         return redirect()->back();
     }

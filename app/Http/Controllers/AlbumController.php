@@ -85,7 +85,7 @@ class AlbumController extends Controller
     public function update(AlbumRequest $request): RedirectResponse
     {
         $album = $this->albumRepository->getById($request->id);
-        $oldAlbum = $this->albumRepository->getById($request->id);
+        $oldAlbum = clone $album;
         $artist = $this->artistRepository->getByName($request->artist);
 
         if (!isset($artist)) {
@@ -107,8 +107,7 @@ class AlbumController extends Controller
 
     public function destroy(DeleteAlbumRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $album = $this->albumRepository->getById($data['id']);
+        $album = $this->albumRepository->getById($request->id);
         if (!isset($album)) {
             return redirect(RouteServiceProvider::HOME);
         }
@@ -116,7 +115,7 @@ class AlbumController extends Controller
         $this->albumLogger->logDeletedAlbum($album);
         $this->albumService->delete($album);
 
-        if ($data['count'] == 1 && $data['currentPage'] != 1) {
+        if ($request->count == 1 && $request->currentPage != 1) {
             $pageNumber = $request->currentPage - 1;
             $url = route('albums.index') . "?page={$pageNumber}";
             return redirect($url);
