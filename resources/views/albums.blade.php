@@ -30,9 +30,11 @@
         </div>
 
         @auth
-            <button class="album_button edit_btn_indent">
-                <a href="{{route('albums.edit', ['id'=>$album->id])}}">EDIT</a>
-            </button>
+            <a href="{{route('albums.edit', ['id'=>$album->id])}}">
+                <button class="album_button edit_btn_indent">
+                    EDIT
+                </button>
+            </a>
 
             <form method="post" class="inline" action="{{route('albums.destroy', ['id'=>$album->id])}}">
                 @csrf
@@ -47,9 +49,11 @@
 
     <br>
     @auth
-        <button class="ml-60 mt-10 mb-10 button">
-            <a href="{{route('albums.create')}}">Add Album</a>
-        </button>
+        <a href="{{route('albums.create')}}">
+            <button class="ml-60 mt-10 mb-10 button">
+                Add Album
+            </button>
+        </a>
     @endauth
 
     <div class="d-flex justify-content-center mb-10 ml-60 mr-60 mt-5">
