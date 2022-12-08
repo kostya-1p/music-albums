@@ -55,6 +55,6 @@
     @endauth
 
     <div class="d-flex justify-content-center mb-10 ml-60 mr-60 mt-5">
-        {{ $artists->links() }}
+        {{ $artists->withQueryString()->links() }}
     </div>
 </x-app-layout>
