@@ -21,8 +21,8 @@ class AlbumRepository implements AlbumRepositoryInterface
 
     public function getFilteredByArtist(string $artistName, int $pageSize): LengthAwarePaginator
     {
-        $artists = Artist::where('name', $artistName)->paginate();
+        $artists = Artist::where('name', $artistName)->paginate($pageSize);
         $artistsIds = $artists->pluck('id');
-        return Album::whereIn('artist_id', $artistsIds)->paginate();
+        return Album::whereIn('artist_id', $artistsIds)->paginate($pageSize);
     }
 }

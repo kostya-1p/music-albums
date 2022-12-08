@@ -8,6 +8,7 @@
     <form method="GET" action="{{ route('artists.indexFiltered') }}">
         <div class="center">
             <select name="artist">
+                <option>All</option>
                 @foreach($artistsForFilter as $artist)
                     <option>{{$artist->name}}</option>
                 @endforeach

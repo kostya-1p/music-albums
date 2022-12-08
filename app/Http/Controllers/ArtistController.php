@@ -37,7 +37,10 @@ class ArtistController extends Controller
 
     public function indexFiltered(FilterRequest $request): View
     {
-        $artists = $this->artistRepository->getFiltered($request->artist, self::PAGE_SIZE);
+        $artists = $request->artist === 'All'
+            ? $this->artistRepository->getAllPaginated(self::PAGE_SIZE)
+            : $this->artistRepository->getFiltered($request->artist, self::PAGE_SIZE);
+
         $artistsForFilter = $this->artistRepository->getAllByUniqueNames();
         return view('artists', compact('artists', 'artistsForFilter'));
     }
