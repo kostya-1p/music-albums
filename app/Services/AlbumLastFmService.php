@@ -15,11 +15,11 @@ class AlbumLastFmService
     private const IMAGE_KEY = 'image';
     private const LARGE_IMAGE_INDEX = 2;
 
-    public function __construct()
+    public function __construct(string $baseURL, string $lastfmApiKey, string $lastfmApiVersion)
     {
-        $this->baseURL = config('services.lastfm_api.domain');
-        $this->lastfmApiKey = config('services.lastfm_api.api_key');
-        $this->lastfmApiVersion = config('services.lastfm_api.api_version');
+        $this->baseURL = $baseURL;
+        $this->lastfmApiKey = $lastfmApiKey;
+        $this->lastfmApiVersion = $lastfmApiVersion;
     }
 
     private function buildURL(string $method, array $params): string

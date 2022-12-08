@@ -9,10 +9,9 @@ class ArtistLastFmController extends Controller
 {
     private ArtistLastFmService $artistLastFmService;
 
-    public function __construct()
+    public function __construct(ArtistLastFmService $artistLastFmService)
     {
-        $this->artistLastFmService = new ArtistLastFmService(config('services.lastfm_api.domain'),
-            config('services.lastfm_api.api_key'), config('services.lastfm_api.api_version'));
+        $this->artistLastFmService = $artistLastFmService;
     }
 
     public function index(string $artistName): JsonResponse
