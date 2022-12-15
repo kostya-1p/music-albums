@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Storage;
  */
 class AlbumFactory extends Factory
 {
+    private function getRandomArtistId(): int
+    {
+        $randomArtist = $this->faker->randomElement(Artist::all());
+        return $randomArtist->id;
+    }
+
     /**
      * Define the model's default state.
      *
@@ -23,7 +29,7 @@ class AlbumFactory extends Factory
 
         return [
             'name' => $this->faker->word(),
-            'artist_id' => $this->faker->numberBetween(1, Artist::count()),
+            'artist_id' => $this->getRandomArtistId(),
             'description' => $this->faker->realText(),
             'img' => empty($storageImagePaths) ? 'alternative.png' : basename($storageImagePaths[$randFileNameIndex]),
         ];
