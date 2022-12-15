@@ -17,6 +17,28 @@ class AlbumFactory extends Factory
         return $randomArtist->id;
     }
 
+    private function getRandomImageNameFromStorage(): ?string
+    {
+        $storageImages = Storage::disk('images')->files('albums');
+        if (empty($storageImages)) {
+            return null;
+        }
+        $randFileNameIndex = rand(0, count($storageImages) - 1);
+        return $storageImages[$randFileNameIndex];
+    }
+
+    private function copyRandomImageInStorage(): string
+    {
+        $oldFileName = $this->getRandomImageNameFromStorage();
+        if (!isset($oldFileName)) {
+            return 'alternative.png';
+        }
+        $extension = substr($oldFileName, strrpos($oldFileName, '.') + 1);
+        $newFileName = uniqid(more_entropy: true) . '.' . $extension;
+        Storage::disk('images')->copy($oldFileName, "albums/$newFileName");
+        return $newFileName;
+    }
+
     /**
      * Define the model's default state.
      *
@@ -24,14 +46,11 @@ class AlbumFactory extends Factory
      */
     public function definition()
     {
-        $storageImagePaths = Storage::disk('images')->files('albums');
-        $randFileNameIndex = rand(0, count($storageImagePaths) - 1);
-
         return [
             'name' => $this->faker->word(),
             'artist_id' => $this->getRandomArtistId(),
             'description' => $this->faker->realText(),
-            'img' => empty($storageImagePaths) ? 'alternative.png' : basename($storageImagePaths[$randFileNameIndex]),
+            'img' => $this->copyRandomImageInStorage(),
         ];
     }
 }
