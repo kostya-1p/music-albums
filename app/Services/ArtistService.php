@@ -34,13 +34,18 @@ class ArtistService
         return $artist->save();
     }
 
-    private function storeImage(?UploadedFile $file): ?string
+    private function storeImage(?UploadedFile $file): string
     {
         if (isset($file)) {
             $fileName = uniqid(more_entropy: true) . '.' . $file->extension();
             $file->move(storage_path('app/images/artists'), $fileName);
             return $fileName;
         }
-        return null;
+
+        $oldFileName = 'alternative.png';
+        $extension = 'png';
+        $newFileName = uniqid(more_entropy: true) . '.' . $extension;
+        Storage::disk('images')->copy("artists/$oldFileName", "artists/$newFileName");
+        return $newFileName;
     }
 }
